@@ -15,6 +15,11 @@
 *.so.*
 *.dylib
 
+# Folders
+obj/
+bin/
+depr/
+
 # Executables
 *.exe
 *.out
