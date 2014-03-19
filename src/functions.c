@@ -21,6 +21,8 @@ static int cornerValue = 2;	/* time value of making a 90-degree turn */
 
 int mines[40][2][2];
 
+
+/* returns coord struct from given coordinates */
 coord return_coord(int x, int y) {
 	coord c;
 	c.x = x;
@@ -28,9 +30,11 @@ coord return_coord(int x, int y) {
 	return c;
 }
 
+/* initializes all nodes */
 void init_field() {
 	int x, y;
 
+	/* iterate over all possible x and y coordinates */
 	for (y = 0; y < YDIM; y++) {
 		for (x = 0; x < XDIM; x++) {
 
@@ -52,66 +56,63 @@ void init_field() {
 	}
 }
 
+/* links node structures to their neighbours (if neighbours exist */
 void link_nodes() {
 	int i, j;
-	coord node_coords; /* define coord */
 
 	for (j = 0; j < YDIM; j++) {
 		for (i = 0; i < XDIM; i++) {
-			// memcpy(&node_coords, &field[i][j].coords, sizeof(node_coords));
-			node_coords = field[i][j].coords;
 
+			/* if node is not in upper row */
 			if (j <= 3)
 				field[i][j].up = &field[i][j + 1];
 			else
 				field[i][j].up = NULL;
 
+			/* if node is not in lower row */
 			if (j >= 1)
 				field[i][j].down = &field[i][j - 1];
 			else
 				field[i][j].down = NULL;
 
+			/* if node is not in rightmost column */
 			if (i <= 3)
 				field[i][j].right = &field[i + 1][j];
 			else
 				field[i][j].right = NULL;
 
+			/* if node is not in leftmost column */
 			if (i >= 1)
 				field[i][j].left = &field[i - 1][j];
 			else
 				field[i][j].left = NULL;
-
-			/*for (b = 0; b < YDIM; b++) {
-			 	for (a = 0; a < XDIM; a++) {
-					if (field[a][b].coords[0] == node_coords[0] && field[a][b].coords[1] - 1 == node_coords[1])
-					 	field[i][j].up = &field[a][b];
-					else if (field[a][b].coords[0] == node_coords[0] && field[a][b].coords[1] + 1 == node_coords[1])
-					 	field[i][j].down = &field[a][b];
-					else if (field[a][b].coords[0] - 1 == node_coords[0] && field[a][b].coords[1] == node_coords[1])
-					 	field[i][j].right = &field[a][b];
-					else if (field[a][b].coords[0] + 1 == node_coords[0] && field[a][b].coords[1] == node_coords[1])
-						field[i][j].left = &field[a][b];
-					 }
-			 } */
 		}
 	}
 }
 
+/* prints all nodes and their coords */
 void print_field() {
 	int i, j;
+
+	/* iterate over all coords from top to bottom, left to right */
 	for (j = YDIM - 1; j >= 0; j--) {
 		for (i = 0; i < XDIM; i++) {
+
+			/* check is node is connected to checkpoint, other value than zero means it is */
 			if (node_to_checkpoint(field[i][j]) != 0)
 				printf("%3d:(%d, %d)", node_to_checkpoint(field[i][j]), field[i][j].coords.x, field[i][j].coords.y);
+			/* if no checkpoint present, just print coords */
 			else printf("    (%d, %d)", field[i][j].coords.x, field[i][j].coords.y);
-			if (i < XDIM - 1)
-				printf(" ");
+
+			if (i < XDIM - 1) printf(" ");
 		}
 		printf("\n");
 	}
 	printf("\n");
 }
 
+
+/* print all the neighbours of a specific node, function not necessary but used for testing */
 void find_neighbours(int x, int y) {
 	printf("N:\t%s {%d}\n", field[x][y].name, field[x][y].checkpoint);
 
@@ -150,13 +151,17 @@ void find_neighbours(int x, int y) {
 	printf("\n");
 }
 
+/* 'convert' checkpoint number to int array with coords */
 void checkpoint_to_coord(int checkpoint, int coords[]) {
 	char name[] = "00";
 	strcpy(name, checkpoints[checkpoint]);
+
+	/* string to int */
 	coords[0] = name[0] - '0';
 	coords[1] = name[1] - '0';
 }
 
+/* convert node to checkpoint */
 int node_to_checkpoint(node n) {
 	int i, a, b;
 	for (i = 1; i <= 12; i++) {
@@ -168,27 +173,7 @@ int node_to_checkpoint(node n) {
 	return 0;
 }
 
-void print_route(int x1, int y1, int x2, int y2) {
-	int x_now = x1, y_now = y1;
-
-	while (x_now != x2 || y_now != y2) {
-		printf("[%d, %d], ", x_now, y_now);
-
-		if (x_now > x2)
-			x_now -= 1;
-		else if (x_now < x2)
-			x_now += 1;
-		else if (y_now > y2)
-			y_now -= 1;
-		else if (y_now < y2)
-			y_now += 1;
-		else
-			printf("ERROR: next node not found! ");
-	}
-
-	printf("[%d, %d]", x_now, y_now);
-}
-
+/*  */
 void clear_marks(void) {
 	int x, y;
 
@@ -238,16 +223,16 @@ void get_route(int start, int end) {
 		i++;
 	}
 
-/*	for (y = YDIM - 1; y >= 0; y--) {
-		for (x = 0; x < XDIM; x++) {
-			printf("%d", field[x][y].mark);
-			if (x < XDIM - 1)
-				printf(" ");
+	/*	for (y = YDIM - 1; y >= 0; y--) {
+			for (x = 0; x < XDIM; x++) {
+				printf("%d", field[x][y].mark);
+				if (x < XDIM - 1)
+					printf(" ");
+			}
+			printf("\n");
 		}
 		printf("\n");
-	}
-	printf("\n");
-*/
+	*/
 
 	current.x = to.x;
 	current.y = to.y;
