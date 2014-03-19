@@ -1,5 +1,5 @@
 # project name (generate executable with this name)
-TARGET		= routeplanner
+TARGET		= routeplanner.out
 
 CC			= gcc -c
 # compiling flags here
