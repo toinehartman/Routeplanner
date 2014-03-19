@@ -22,6 +22,11 @@
 *.x86_64
 *.hex
 
+# Folders
+bin/
+obj/
+depr/
+
 ## Mac OSX specific
 .DS_Store
 .AppleDouble
