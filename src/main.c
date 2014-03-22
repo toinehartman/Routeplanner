@@ -38,8 +38,6 @@ int main(int argc, char* argv[]) {
 
 	clear_marks();
 	
-	init_mines();
-	
 	get_route(c1, c2);
 
 	printf("\n");

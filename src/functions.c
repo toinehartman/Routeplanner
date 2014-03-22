@@ -19,8 +19,6 @@ char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "1
 static int roadValue = 1;		/* time-value of driving the length of a road */
 static int cornerValue = 2;	/* time value of making a 90-degree turn */
 
-int mines[40][2][2];
-
 
 /* returns coord struct from given coordinates */
 coord return_coord(int x, int y) {
@@ -280,72 +278,4 @@ void get_route(int start, int end) {
 		}
 	}
 
-}
-
-void init_mines() {
-	int i, j, k, c = 0, x1, y1, x2, y2;
-
-	for (i = 0; i < 40; i++)
-		for (j = 0; j < 2; j++)
-			for (k = 0; k < 2; k++)
-				mines[i][j][k] = -1;
-
-	static const char *file_name = "mines.txt";
-	FILE *fp;
-	int ch, lines;
-	char *line = NULL;
-	size_t len = 5;
-
-	fp = fopen(file_name, "r");
-
-	if (!fp) {
-		printf("Error while opening %s.\n", file_name);
-		exit(EXIT_FAILURE);
-	}
-	printf("mines.txt read.\n");
-
-	for (i = 0; i < 40; i++) {
-		if (mines[i][0][0] != -1) {
-			printf("mine %d read\n", i);
-			c++;
-		}
-		else printf("mine %d wrong\n", i);
-	}
-
-	int m[c][2][2];
-	for (i = 0; i < 40; i++) {
-		if (getline(&line, &len, fp) == -1) break;
-		m[i][0][0] = line[0] - '0';
-		m[i][0][1] = line[1] - '0';
-		m[i][1][0] = line[3] - '0';
-		m[i][1][1] = line[4] - '0';
-	}
-
-	for (i = 0; i < c; i++)
-		memcpy(m[i], mines[i], sizeof(int[2][2]));
-
-	for (i = 0; i < c; i++) {
-		x1 = m[i][0][0];
-		y1 = m[i][0][1];
-		x2 = m[i][1][0];
-		y2 = m[i][1][1];
-
-		printf("mine: (%d, %d) - (%d, %d)\n", x1, y1, x2, y2);
-		if (x1 < x2 && y1 == y2) {
-			field[x1][y1].right = NULL;
-			field[x2][y2].left = NULL;
-		}
-		if (x1 > x2 && y1 == y2) {
-			field[x1][y1].left = NULL;
-			field[x2][y2].right = NULL;
-		}
-		if (x1 == x2 && y1 < y2) {
-			field[x1][y1].up = NULL;
-			field[x2][y2].down = NULL;
-		}
-		if (x1 == x2 && y1 > y2) {
-			field[x1][y1].down = NULL;
-			field[x2][y2].up = NULL;
-		}
-	}
 }
