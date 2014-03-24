@@ -22,13 +22,16 @@ DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 # link
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
+	@$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
+	@echo "Linking $(OBJECTS), creating $(TARGET)..."
+	@echo "Compilation finished!"
 
 # compile and generate dependency info
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
 	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
-	$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
+	@$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
+	@echo "Compiling $(SRCDIR)/$*.c..."
 
 # remove compilation products
 clean:
