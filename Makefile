@@ -1,15 +1,16 @@
-# project name (generate executable with this name)
+# name of executable output file in $(BINDIR)
 TARGET		= routeplanner.out
 
 CC			= gcc -c
-# compiling flags here
+# flags for gcc compiler
 CFLAGS		= -O3
 
 LINKER		= gcc -o
-# linking flags here
+
+# flags for gcc linker
 LFLAGS		= -lm -O3
 
-# change these to set the proper directories where each files shoould be
+# directories for source, object and binary file(s)
 SRCDIR		= src
 OBJDIR		= obj
 BINDIR		= bin
@@ -19,26 +20,28 @@ INCLUDES	:= $(wildcard $(SRCDIR)/*.h)
 OBJECTS 	:= $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 
-# link
+# link all .o files together
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
 	@$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
 	@echo "Linking $(OBJECTS), creating $(TARGET)..."
 	@echo "Compilation finished!"
 
-# compile and generate dependency info
+# compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
 	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
 	@$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
 	@echo "Compiling $(SRCDIR)/$*.c..."
 
-# remove compilation products
+# remove object and dependency files
 clean:
 	@rm -fv $(BINDIR)/$(TARGET) $(OBJECTS) $(OBJDIR)/*.d
 
+# remove all products of make
 remove:
 	@rm -rfv $(BINDIR) $(OBJDIR)
 
-run:
+# run the program with given arguments
+run: $(BINDIR)/$(TARGET)
 	./$(BINDIR)/$(TARGET) 11 5
