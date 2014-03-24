@@ -17,6 +17,5 @@ int node_to_checkpoint(node n);
 void print_route(int x1, int y1, int x2, int y2);
 void clear_marks(void);
 void get_route(int start, int end);
-void init_mines();
 
 #endif
