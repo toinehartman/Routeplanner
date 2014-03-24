@@ -37,10 +37,12 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 # remove object and dependency files
 clean:
 	@rm -fv $(BINDIR)/$(TARGET) $(OBJECTS) $(OBJDIR)/*.d
+	@echo "All object and dependency files removed!"
 
 # remove all products of make
 remove:
-	@rm -rfv $(BINDIR) $(OBJDIR)
+	@rm -rf $(BINDIR) $(OBJDIR)
+	@echo "All object, dependency and binary files removed!"
 
 # run the program with given arguments
 run: $(BINDIR)/$(TARGET)
