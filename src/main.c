@@ -25,7 +25,8 @@ int main(int argc, char* argv[]) {
 		x2 = n2[0];
 		y2 = n2[1];
 
-	} else { /* anders ERROR */
+	} 
+	else { /* anders ERROR */
 		printf("2 arguments required!\n");
 		return 1;
 	}
@@ -35,12 +36,8 @@ int main(int argc, char* argv[]) {
 	init_field();
 	link_nodes();
 	print_field();
-
-	clear_marks();
-	
 	get_route(c1, c2);
 
 	printf("\n");
-
 	return 0;
 }

@@ -171,7 +171,6 @@ int node_to_checkpoint(node n) {
 	return 0;
 }
 
-/*  */
 void clear_marks(void) {
 	int x, y;
 
@@ -187,6 +186,7 @@ void get_route(int start, int end) {
 	coord min_coords, from, to, current;
 	coord route[40];
 
+	clear_marks();
 	checkpoint_to_coord(start, f);
 	checkpoint_to_coord(end, t);
 
@@ -221,27 +221,28 @@ void get_route(int start, int end) {
 		i++;
 	}
 
-	/*	for (y = YDIM - 1; y >= 0; y--) {
-			for (x = 0; x < XDIM; x++) {
-				printf("%d", field[x][y].mark);
-				if (x < XDIM - 1)
-					printf(" ");
-			}
-			printf("\n");
+	for (y = YDIM - 1; y >= 0; y--) {
+		for (x = 0; x < XDIM; x++) {
+			printf("%d", field[x][y].mark);
+			if (x < XDIM - 1)
+				printf(" ");
 		}
 		printf("\n");
-	*/
+	}
+	printf("\n");
+	
 
-	current.x = to.x;
-	current.y = to.y;
+	current = to;
 
 	for (j = 0; j < 40; j++) {
 		route[j].x = -1;
 		route[j].y = -1;
 	}
+
 	/*
 	printf("Route initialized...\n");
 	*/
+	
 	while (current.x != from.x || current.y != from.y) {
 		/*
 		printf("(%d, %d) ▷ ", current.x, current.y);
@@ -264,6 +265,7 @@ void get_route(int start, int end) {
 		current = min_coords;
 		// printf("   min_mark: %d\n", min_mark);
 	}
+
 	/*
 	printf("(%d, %d)\n", current.x, current.y);
 	*/
