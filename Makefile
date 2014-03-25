@@ -40,4 +40,5 @@ clean:
 
 # run the program with given arguments
 run: $(BINDIR)/$(TARGET)
-	./$(BINDIR)/$(TARGET) 11 5
+	@echo "Running $(BINDIR)/$(TARGET)..."
+	@./$(BINDIR)/$(TARGET) 11 5
