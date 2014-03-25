@@ -62,28 +62,20 @@ void link_nodes() {
 		for (i = 0; i < XDIM; i++) {
 
 			/* if node is not in upper row */
-			if (j <= 3)
-				field[i][j].up = &field[i][j + 1];
-			else
-				field[i][j].up = NULL;
+			if (j <= 3) field[i][j].up = &field[i][j + 1];
+			else field[i][j].up = NULL;
 
 			/* if node is not in lower row */
-			if (j >= 1)
-				field[i][j].down = &field[i][j - 1];
-			else
-				field[i][j].down = NULL;
+			if (j >= 1) field[i][j].down = &field[i][j - 1];
+			else field[i][j].down = NULL;
 
 			/* if node is not in rightmost column */
-			if (i <= 3)
-				field[i][j].right = &field[i + 1][j];
-			else
-				field[i][j].right = NULL;
+			if (i <= 3) field[i][j].right = &field[i + 1][j];
+			else field[i][j].right = NULL;
 
 			/* if node is not in leftmost column */
-			if (i >= 1)
-				field[i][j].left = &field[i - 1][j];
-			else
-				field[i][j].left = NULL;
+			if (i >= 1) field[i][j].left = &field[i - 1][j];
+			else field[i][j].left = NULL;
 		}
 	}
 }
@@ -97,7 +89,7 @@ void print_field() {
 		for (i = 0; i < XDIM; i++) {
 
 			/* check is node is connected to checkpoint, other value than zero means it is */
-			if (node_to_checkpoint(field[i][j]) != 0)
+			if (node_to_checkpoint(field[i][j]) != -1)
 				printf("%3d:(%d, %d)", node_to_checkpoint(field[i][j]), field[i][j].coords.x, field[i][j].coords.y);
 			/* if no checkpoint present, just print coords */
 			else printf("    (%d, %d)", field[i][j].coords.x, field[i][j].coords.y);
@@ -110,43 +102,33 @@ void print_field() {
 }
 
 
-/* print all the neighbours of a specific node, function not necessary but used for testing */
-void find_neighbours(int x, int y) {
-	printf("N:\t%s {%d}\n", field[x][y].name, field[x][y].checkpoint);
+/* print all the neighbours of a specific node, function not necessarn.y but used for testing */
+void find_neighbours(coord n) {
+	printf("N:\t%s {%d}\n", field[n.x][n.y].name, field[n.x][n.y].checkpoint);
 
-	if (field[x][y].up && field[x][y].up->checkpoint != 0)
-		printf("U:\t%s {%d}\n", field[x][y].up->name,
-				field[x][y].up->checkpoint);
-	else if (field[x][y].up->name == 0)
-		printf("U:\t-\n");
-	else
-		printf("U:\t%s\n", field[x][y].up->name);
+	if (field[n.x][n.y].up && field[n.x][n.y].up->checkpoint != 0)
+		printf("U:\t%s {%d}\n", field[n.x][n.y].up->name,
+				field[n.x][n.y].up->checkpoint);
+	else if (field[n.x][n.y].up->name == 0) printf("U:\t-\n");
+	else printf("U:\t%s\n", field[n.x][n.y].up->name);
 
-	if (field[x][y].down && field[x][y].down->checkpoint != 0)
-		printf("D:\t%s {%d}\n", field[x][y].down->name,
-				field[x][y].down->checkpoint);
-	else if (field[x][y].down->name == 0)
-		printf("D:\t-\n");
-	else
-		printf("D:\t%s\n", field[x][y].down->name);
+	if (field[n.x][n.y].down && field[n.x][n.y].down->checkpoint != 0)
+		printf("D:\t%s {%d}\n", field[n.x][n.y].down->name,
+				field[n.x][n.y].down->checkpoint);
+	else if (field[n.x][n.y].down->name == 0) printf("D:\t-\n");
+	else printf("D:\t%s\n", field[n.x][n.y].down->name);
 
-	if (field[x][y].right && field[x][y].right->checkpoint != 0)
-		printf("R:\t%s {%d}\n", field[x][y].right->name,
-				field[x][y].right->checkpoint);
-	else if (field[x][y].right->name == 0)
-		printf("R:\t-\n");
-	else
-		printf("R:\t%s\n", field[x][y].right->name);
+	if (field[n.x][n.y].right && field[n.x][n.y].right->checkpoint != 0)
+		printf("R:\t%s {%d}\n", field[n.x][n.y].right->name,
+				field[n.x][n.y].right->checkpoint);
+	else if (field[n.x][n.y].right->name == 0) printf("R:\t-\n");
+	else printf("R:\t%s\n", field[n.x][n.y].right->name);
 
-	if (field[x][y].left && field[x][y].left->checkpoint != 0)
-		printf("L:\t%s {%d}\n", field[x][y].left->name,
-				field[x][y].left->checkpoint);
-	else if (field[x][y].left->name == 0)
-		printf("L:\t-\n");
-	else
-		printf("L:\t%s\n", field[x][y].left->name);
-
-	printf("\n");
+	if (field[n.x][n.y].left && field[n.x][n.y].left->checkpoint != 0)
+		printf("L:\t%s {%d}\n", field[n.x][n.y].left->name,
+				field[n.x][n.y].left->checkpoint);
+	else if (field[n.x][n.y].left->name == 0) printf("L:\t-\n");
+	else printf("L:\t%s\n", field[n.x][n.y].left->name);
 }
 
 /* 'convert' checkpoint number to int array with coords */
@@ -171,10 +153,10 @@ int node_to_checkpoint(node n) {
 		if (a == b)
 			return i;
 	}
-	return 0;
+	return -1;
 }
 
-void clear_marks(void) {
+void clear_marks() {
 	int x, y;
 
 	for (y = 0; y < YDIM; y++)
@@ -184,17 +166,61 @@ void clear_marks(void) {
 		}
 }
 
-void get_route(int start, int end) {
-	int x, y, i, finished, j, min_mark = 0, z = 0;
-	coord min_coords, from, to, current;
+void get_route(coord from, coord to) {
+	int start, end, j, min_mark = 0, z = 0;
+	coord min_coords, current;
 	coord route[40];
 
-	clear_marks();
-	from = checkpoint_to_coord(start);
-	to = checkpoint_to_coord(end);
+	route_marks(from, to);
+	start = node_to_checkpoint(field[from.x][from.y]);
+	end = node_to_checkpoint(field[to.x][to.y]);
 
 	printf("Start\t%d: (%d, %d)\n", start, from.x, from.y);
-	printf("End\t%d: (%d, %d)\n\n", end, to.x, to.y);
+	printf("End\t%d: (%d, %d)\n", end, to.x, to.y);
+	printf("Length of shortest route: %d\n", route_len(from, to));
+	printf("\n");
+
+	current = to;
+
+	for (j = 0; j < 40; j++) {
+		route[j].x = -1;
+		route[j].y = -1;
+	}
+	
+	while (current.x != from.x || current.y != from.y) {
+		route[z] = current;
+		z++;
+
+		node *neighbours[] = { field[current.x][current.y].up,
+				field[current.x][current.y].down,
+				field[current.x][current.y].right,
+				field[current.x][current.y].left };
+		for (j = 0; j <= 3; j++)
+			if (neighbours[j]
+					&& (!min_mark || neighbours[j]->mark < min_mark)) {
+				min_mark = neighbours[j]->mark;
+				min_coords.x = neighbours[j]->coords.x;
+				min_coords.y = neighbours[j]->coords.y;
+			}
+		current = min_coords;
+	}
+
+	route[z] = current;
+
+	for (j = 39; j >= 0; j--) {
+		if (route[j].x != -1) {
+			printf("(%d, %d)", route[j].x, route[j].y);
+			if (j) printf(" ▷ ");
+			else printf("\n");
+		}
+	}
+
+}
+
+void route_marks(coord from, coord to) {
+	int finished, i, x, y;
+
+	clear_marks();
 
 	field[from.x][from.y].mark = 1;
 	i = 1;
@@ -218,64 +244,23 @@ void get_route(int start, int end) {
 				}
 		i++;
 	}
+}
 
+void print_route_marks() {
+	int x, y;
+	
 	for (y = YDIM - 1; y >= 0; y--) {
 		for (x = 0; x < XDIM; x++) {
 			printf("%d", field[x][y].mark);
-			if (x < XDIM - 1)
-				printf(" ");
+			if (x < XDIM - 1) printf(" ");
 		}
 		printf("\n");
 	}
 	printf("\n");
-	
-
-	current = to;
-
-	for (j = 0; j < 40; j++) {
-		route[j].x = -1;
-		route[j].y = -1;
-	}
-
-	/*
-	printf("Route initialized...\n");
-	*/
-	
-	while (current.x != from.x || current.y != from.y) {
-		/*
-		printf("(%d, %d) ▷ ", current.x, current.y);
-		*/
-
-		route[z] = current;
-		z++;
-
-		node *neighbours[] = { field[current.x][current.y].up,
-				field[current.x][current.y].down,
-				field[current.x][current.y].right,
-				field[current.x][current.y].left };
-		for (j = 0; j <= 3; j++)
-			if (neighbours[j]
-					&& (!min_mark || neighbours[j]->mark < min_mark)) {
-				min_mark = neighbours[j]->mark;
-				min_coords.x = neighbours[j]->coords.x;
-				min_coords.y = neighbours[j]->coords.y;
-			}
-		current = min_coords;
-		// printf("   min_mark: %d\n", min_mark);
-	}
-
-	/*
-	printf("(%d, %d)\n", current.x, current.y);
-	*/
-
-	route[z] = current;
-
-	for (j = 39; j >= 0; j--) {
-		if (route[j].x != -1) {
-			printf("(%d, %d)", route[j].x, route[j].y);
-			if (j) printf(" ▷ ");
-			else printf("\n");
-		}
-	}
-
 }
+
+int route_len(coord a, coord b) {
+	route_marks(a, b);
+	return field[b.x][b.y].mark;
+}
+
