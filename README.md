@@ -3,32 +3,46 @@ Routeplanner
 This is a route planner, whick gives the shortest route between two points on an 5 by 5 grid.
 ## Synopsis
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+This routeplanner find a route between a starting checkpoint on the edge of a **5 by 5 grid** and one or more endpoints. It can go by the checkpoints in a given order or via the shortest route that visits them all.
+<img src='docs/competition_field.pdf' width='80%'>
 
 ## Code Example
+```
+➜  Routeplanner Toine git:(master) ./bin/routeplanner.out 1 5
 
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+    (0, 4)   9:(1, 4)   8:(2, 4)   7:(3, 4)     (4, 4)
+ 10:(0, 3)     (1, 3)     (2, 3)     (3, 3)   6:(4, 3)
+ 11:(0, 2)     (1, 2)     (2, 2)     (3, 2)   5:(4, 2)
+ 12:(0, 1)     (1, 1)     (2, 1)     (3, 1)   4:(4, 1)
+    (0, 0)   1:(1, 0)   2:(2, 0)   3:(3, 0)     (4, 0)
+
+Start	1: (1, 0)
+End		5: (4, 2)
+
+(1, 0) ▷ (2, 0) ▷ (3, 0) ▷ (4, 0) ▷ (4, 1) ▷ (4, 2)
+```
 
 ## Motivation
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+This program wa written to guide an autonomous robot, as part of EPO2, a project of Electrical Engineering at the University of Technology Delft.
 
 ## Installation
-
-Provide code examples and explanations of how to get the project.
-
-## API Reference
-
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
-
-## Tests
-
-Describe and show how to run the tests with code examples.
+```
+cd <download_folder>/Routeplanner\ Toine/
+make
+```
+And then `./bin/routeplanner.out 1 5`, this will give the shortest route from checkpoint 1 to checkpoint 5.
 
 ## Contributors
 
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+Projectgroep B2:
 
-## License
+*	Daniël Brouwer
+*	Toine Hartman
+*	Dennis de Jong
+*	Sam de Jong
+*	George Koolman
+*	Wesley Umans
+*	Luc van Wietmarschen
 
-A short snippet describing the license (MIT, Apache, etc.)
+The method to find the shortest route is based on [Lee's algorithm](http://en.wikipedia.org/wiki/Lee_algorithm "Lee algorithm, Wikipedia").
