@@ -24,25 +24,19 @@ DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
 	@$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
-	@echo "Linking $(OBJECTS), creating $(TARGET)..."
-	@echo "Compilation finished!"
+	@echo "$(OBJECTS) ==> $(TARGET)"
 
 # compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
 	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
 	@$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
-	@echo "Compiling $(SRCDIR)/$*.c..."
+	@echo "$(SRCDIR)/$*.c ==> $(OBJDIR)/$*.o"
 
 # remove object and dependency files
 clean:
-	@rm -fv $(BINDIR)/$(TARGET) $(OBJECTS) $(OBJDIR)/*.d
+	@rm -f $(BINDIR)/$(TARGET) $(OBJECTS) $(OBJDIR)/*.d
 	@echo "All object and dependency files removed!"
-
-# remove all products of make
-remove:
-	@rm -rf $(BINDIR) $(OBJDIR)
-	@echo "All object, dependency and binary files removed!"
 
 # run the program with given arguments
 run: $(BINDIR)/$(TARGET)
