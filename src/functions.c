@@ -16,8 +16,8 @@
 node field[XDIM][YDIM]; /* initialize the field */
 char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "14", "03", "02", "01" }; /* item i in this array is */
 
-static int roadValue = 1;		/* time-value of driving the length of a road */
-static int cornerValue = 2;	/* time value of making a 90-degree turn */
+static const int roadValue = 1;		/* time-value of driving the length of a road */
+static const int cornerValue = 2;	/* time value of making a 90-degree turn */
 
 
 /* returns coord struct from given coordinates */
