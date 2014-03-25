@@ -4,7 +4,7 @@ This is a route planner, whick gives the shortest route between two points on an
 ## Synopsis
 
 This routeplanner find a route between a starting checkpoint on the edge of a **5 by 5 grid** and one or more endpoints. It can go by the checkpoints in a given order or via the shortest route that visits them all.
-<img src='docs/competition_field.pdf' width='80%'>
+<img src='docs/competition_field.jpg' width='80%'>
 
 ## Code Example
 ```
