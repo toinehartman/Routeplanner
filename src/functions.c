@@ -150,13 +150,16 @@ void find_neighbours(int x, int y) {
 }
 
 /* 'convert' checkpoint number to int array with coords */
-void checkpoint_to_coord(int checkpoint, int coords[]) {
+coord checkpoint_to_coord(int checkpoint) {
 	char name[] = "00";
+	coord coords;
 	strcpy(name, checkpoints[checkpoint]);
 
-	/* string to int */
-	coords[0] = name[0] - '0';
-	coords[1] = name[1] - '0';
+	/* string/char to int */
+	coords.x = name[0] - '0';
+	coords.y = name[1] - '0';
+
+	return coords;
 }
 
 /* convert node to checkpoint */
@@ -182,18 +185,13 @@ void clear_marks(void) {
 }
 
 void get_route(int start, int end) {
-	int x, y, i, finished, f[] = { 0, 0 }, t[] = { 0, 0 }, j, min_mark = 0, z = 0;
+	int x, y, i, finished, j, min_mark = 0, z = 0;
 	coord min_coords, from, to, current;
 	coord route[40];
 
 	clear_marks();
-	checkpoint_to_coord(start, f);
-	checkpoint_to_coord(end, t);
-
-	from.x = f[0];
-	from.y = f[1];
-	to.x = t[0];
-	to.y = t[1];
+	from = checkpoint_to_coord(start);
+	to = checkpoint_to_coord(end);
 
 	printf("Start\t%d: (%d, %d)\n", start, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n\n", end, to.x, to.y);
