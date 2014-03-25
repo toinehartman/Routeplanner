@@ -11,11 +11,13 @@ coord return_coord(int x, int y);
 void init_field();
 void link_nodes();
 void print_field();
-void find_neighbours(int x, int y);
+void find_neighbours(coord n);
 coord checkpoint_to_coord(int checkpoint);
 int node_to_checkpoint(node n);
-void print_route(int x1, int y1, int x2, int y2);
-void clear_marks(void);
-void get_route(int start, int end);
+void clear_marks();
+void get_route(coord from, coord to);
+void route_marks(coord from, coord to);
+void print_route_marks();
+int route_len(coord a, coord b);
 
 #endif

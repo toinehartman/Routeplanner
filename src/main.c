@@ -9,17 +9,15 @@
 #include "functions.h"
 
 int main(int argc, char* argv[]) {
-	int i, arg1, arg2;
+	int i, cp1, cp2;
 	coord one, two;
-	int n1[] = { 0, 0 }, n2[] = { 0, 0 };
-	int printfield = 0;
 
 	if (argc - 1 >= 2) { /* als checkpoints in argument zijn meegegeven, deze gebruiken */
-		arg1 = atoi(argv[1]);
-		one = checkpoint_to_coord(arg1);
+		cp1 = atoi(argv[1]);
+		one = checkpoint_to_coord(cp1);
 
-		arg2 = atoi(argv[2]);
-		one = checkpoint_to_coord(arg2);
+		cp2 = atoi(argv[2]);
+		two = checkpoint_to_coord(cp2);
 	} 
 	else { /* anders ERROR */
 		printf("2 arguments required!\n");
@@ -31,7 +29,7 @@ int main(int argc, char* argv[]) {
 	init_field();
 	link_nodes();
 	print_field();
-	get_route(arg1, arg2);
+	get_route(one, two);
 
 	printf("\n");
 	return 0;
