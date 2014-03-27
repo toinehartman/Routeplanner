@@ -10,6 +10,7 @@
 #include <string.h>
 #include <math.h>
 
+#include "main.h"
 #include "data.h"
 #include "functions.h"
 
@@ -18,7 +19,7 @@ char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "1
 
 static const int roadValue = 1;		/* time-value of driving the length of a road */
 static const int cornerValue = 2;	/* time value of making a 90-degree turn */
-
+static coord current;
 
 /* returns coord struct from given coordinates */
 coord return_coord(int x, int y) {
@@ -52,6 +53,8 @@ void init_field() {
 			field[x][y].right = NULL;
 		}
 	}
+
+	current = field[1][0].coords;
 }
 
 /* links node structures to their neighbours (if neighbours exist */
@@ -168,7 +171,7 @@ void clear_marks() {
 
 void get_route(coord from, coord to) {
 	int start, end, j, min_mark = 0, z = 0;
-	coord min_coords, current;
+	coord min_coords;
 	coord route[40];
 
 	route_marks(from, to);
@@ -261,5 +264,25 @@ void print_route_marks() {
 
 int route_len(coord a, coord b) {
 	route_marks(a, b);
-	return field[b.x][b.y].mark;
+	return field[b.x][b.y].mark - field[a.x][a.y].mark;
+}
+
+void short_sort(int *check, int num) {
+	int i, j, k, tmp;
+
+	for (i = 0; i < num; i++)
+		for (j = i + 1; j < num; j++)
+			for (k = j + 1; k < num; k++)
+				if (route_len(checkpoint_to_coord(check[i]), checkpoint_to_coord(check[k])) < route_len(checkpoint_to_coord(check[i]), checkpoint_to_coord(check[j]))) {
+					tmp = check[j];
+					check[j] = check[k];
+					check[k] = tmp;
+				}
+
+	// j = check[0];
+	// printf("j = check[0];\n");
+	// check[0] = check[1];
+	// printf("check[0] = check[1];\n");
+	// check[1] = j;
+	// printf("check[1] = j;\n");
 }

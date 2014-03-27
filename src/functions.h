@@ -5,6 +5,7 @@
 #define YDIM		5		/* define y-dimension */
 #define ARR_LEN(a)	(sizeof(a) / sizeof(a[0]))		/* used to determine the length of arrays */
 
+#include "main.h"
 #include "data.h"
 
 coord return_coord(int x, int y);
@@ -19,5 +20,6 @@ void get_route(coord from, coord to);
 void route_marks(coord from, coord to);
 void print_route_marks();
 int route_len(coord a, coord b);
+void short_sort(int *check, int num);
 
 #endif
