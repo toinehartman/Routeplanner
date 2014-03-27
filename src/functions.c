@@ -159,6 +159,7 @@ int node_to_checkpoint(node n) {
 	return -1;
 }
 
+/* reset all Lee's marks to zero and mark all nodes as not visited */
 void clear_marks() {
 	int x, y;
 
@@ -169,17 +170,19 @@ void clear_marks() {
 		}
 }
 
+/* find the shortest route from coord 'from' to coord 'to' */
 void get_route(coord from, coord to) {
-	int start, end, j, min_mark = 0, z = 0;
+	int start_cp, end_cp, j, min_mark = 0, z = 0;
 	coord min_coords;
 	coord route[40];
 
 	route_marks(from, to);
-	start = node_to_checkpoint(field[from.x][from.y]);
-	end = node_to_checkpoint(field[to.x][to.y]);
 
-	printf("Start\t%d: (%d, %d)\n", start, from.x, from.y);
-	printf("End\t%d: (%d, %d)\n", end, to.x, to.y);
+	start_cp = node_to_checkpoint(field[from.x][from.y]);
+	end_cp = node_to_checkpoint(field[to.x][to.y]);
+
+	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
+	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
 	printf("Length of shortest route: %d\n", route_len(from, to));
 	printf("\n");
 
@@ -220,9 +223,11 @@ void get_route(coord from, coord to) {
 
 }
 
+/* mark all points according to Lee */
 void route_marks(coord from, coord to) {
 	int finished, i, x, y;
 
+	/* clear ecerything first */
 	clear_marks();
 
 	field[from.x][from.y].mark = 1;
@@ -249,6 +254,7 @@ void route_marks(coord from, coord to) {
 	}
 }
 
+/* print all of Lee's marks */
 void print_route_marks() {
 	int x, y;
 	
@@ -262,11 +268,13 @@ void print_route_marks() {
 	printf("\n");
 }
 
+/* get the lenght of a certain route without actually going */
 int route_len(coord a, coord b) {
 	route_marks(a, b);
 	return field[b.x][b.y].mark - field[a.x][a.y].mark;
 }
 
+/* sort all destinations checkpoints for shortest total distance */
 void short_sort(int *check, int num) {
 	int i, j, k, tmp;
 

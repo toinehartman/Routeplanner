@@ -53,7 +53,6 @@ int main(int argc, char* argv[]) {
 		short_sort(cp, cp_num);
 
 		printf("Sorted!\n");
-
 		for (j = 0; j < cp_num; j++)
 			printf("%d ", cp[j]);
 		printf("\n");
