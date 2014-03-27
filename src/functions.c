@@ -173,6 +173,7 @@ void clear_marks() {
 /* find the shortest route from coord 'from' to coord 'to' */
 void get_route(coord from, coord to) {
 	int start_cp, end_cp, j, min_mark = 0, z = 0;
+
 	coord min_coords;
 	coord route[40];
 
