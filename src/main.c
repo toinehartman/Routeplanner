@@ -34,7 +34,7 @@ int main(int argc, char* argv[]) {
 				cp[i] = atoi(argv[i + 1]);
 			else {
 				printf("%d is not a number of an existing checkpoint!!\n", a);
-				return 1;
+				exit(EXIT_FAILURE);
 			}
 		}
 
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
 			if ((new_cp = (int*) realloc(cp, (cp_num) * sizeof(int))) == NULL) {
 				free(cp);
 				printf("ERROR: Unable to allocate enough memory for all destinations!\n");
-				return 1;
+				exit(EXIT_FAILURE);
 			}
 			cp = new_cp;
 			free (new_cp);
@@ -64,7 +64,7 @@ int main(int argc, char* argv[]) {
 	} 
 	else { /* anders ERROR */
 		printf("At least 1 argument required!\n");
-		return 1;
+		exit(EXIT_FAILURE);
 	}
 
 	printf("\n");
