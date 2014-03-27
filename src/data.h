@@ -1,11 +1,13 @@
 #ifndef DATA_H
 #define DATA_H
 
+/* coord to conveniently use x and y coordinates */
 typedef struct Coord {
 	int x;
 	int y;
 } coord;
 
+/* node structure, represents a junction at the map */
 typedef struct Node {
 	char name[3];
 	struct Coord coords;
