@@ -24,14 +24,14 @@ DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
 	@$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
-	@echo "$(OBJECTS) ==> $(TARGET)"
+	@echo "$(BINDIR)/$(TARGET)"
 
 # compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
 	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
 	@$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
-	@echo "$(SRCDIR)/$*.c ==> $(OBJDIR)/$*.o"
+	@echo "$*.c ==> $*.o"
 
 # remove object and dependency files
 clean:
