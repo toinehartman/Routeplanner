@@ -15,7 +15,7 @@
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
 
-	int i, j, *cp, cp_num, a;
+	int i, j, *cp, *new_cp, cp_num, a;
 	cp_num = argc - 1;
 
 	for (i = 0; i < argc; i++) {
@@ -40,7 +40,14 @@ int main(int argc, char* argv[]) {
 
 		if (cp[0] != START_CP) {
 			cp_num++;
-			cp = (int*) realloc(cp, (cp_num) * sizeof(int));
+			if ((new_cp = (int*) realloc(cp, (cp_num) * sizeof(int))) == NULL) {
+				free(cp);
+				printf("ERROR: Unable to allocate enough memory for all destinations!\n");
+				return 1;
+			}
+			cp = new_cp;
+			free (new_cp);
+			
 			for (i = cp_num - 1; i > 0; i--)
 				cp[i] = cp[i - 1];
 			cp[0] = START_CP;
