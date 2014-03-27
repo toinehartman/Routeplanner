@@ -1,10 +1,3 @@
-/*
- * field.h
- *
- *  Created on: Feb 19, 2014
- *      Author: Toine
- */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

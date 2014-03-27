@@ -1,3 +1,5 @@
+## Makefile for the routeplanner project
+
 # name of executable output file in $(BINDIR)
 TARGET		= routeplanner.out
 
