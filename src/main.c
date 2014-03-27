@@ -25,7 +25,7 @@ int main(int argc, char* argv[]) {
 	// printf("cp created, %d elements of %ld bytes\n", cp_num, sizeof(int));
 
 	if (cp_num >= 1) { /* als checkpoints in argument zijn meegegeven, deze gebruiken */
-		printf("Number of target checkpoints: %d\n", cp_num);
+		printf("Number of target checkpoints: %d\n", cp_num - 1);
 
 		for (i = 0; i < cp_num; i++) {
 			a = atoi(argv[i + 1]);
@@ -60,8 +60,10 @@ int main(int argc, char* argv[]) {
 	else {
 		for (i = 0; i < cp_num; i++)
 			printf("%d ", cp[i]);
-		printf("\n");
+		printf("\n\n");
 	}
+
+	route_sequence(cp, cp_num);
 
 	return 0;
 }

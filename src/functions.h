@@ -8,6 +8,8 @@
 #include "main.h"
 #include "data.h"
 
+extern node field[XDIM][YDIM];
+
 coord return_coord(int x, int y);
 void init_field();
 void link_nodes();
@@ -21,5 +23,6 @@ void route_marks(coord from, coord to);
 void print_route_marks();
 int route_len(coord a, coord b);
 void short_sort(int *check, int num);
+void route_sequence(int *checks, int checks_num);
 
 #endif

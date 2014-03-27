@@ -165,12 +165,13 @@ void clear_marks() {
 
 /* find the shortest route from coord 'from' to coord 'to' */
 void get_route(coord from, coord to) {
-	int start_cp, end_cp, j, min_mark = 0, z = 0;
+	int start_cp, end_cp, j, min_mark = 0, z = 0, len;
 
 	coord min_coords;
 	coord route[40];
 
 	route_marks(from, to);
+	len = route_len(from, to);
 
 	start_cp = node_to_checkpoint(field[from.x][from.y]);
 	end_cp = node_to_checkpoint(field[to.x][to.y]);
@@ -178,11 +179,11 @@ void get_route(coord from, coord to) {
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
 	printf("Length of shortest route: %d\n", route_len(from, to));
-	printf("\n");
+	// printf("\n");
 
 	current = to;
 
-	for (j = 0; j < 40; j++) {
+	for (j = 0; j < len; j++) {
 		route[j].x = -1;
 		route[j].y = -1;
 	}
@@ -207,7 +208,7 @@ void get_route(coord from, coord to) {
 
 	route[z] = current;
 
-	for (j = 39; j >= 0; j--) {
+	for (j = len; j >= 0; j--) {
 		if (route[j].x != -1) {
 			printf("(%d, %d)", route[j].x, route[j].y);
 			if (j) printf(" ▷ ");
@@ -280,4 +281,13 @@ void short_sort(int *check, int num) {
 					check[j] = check[k];
 					check[k] = tmp;
 				}
+}
+
+void route_sequence(int *checks, int checks_num) {
+	int i;
+
+	for (i = 0; i < checks_num - 1; i++) {
+		get_route(checkpoint_to_coord(checks[i]), checkpoint_to_coord(checks[i + 1]));
+		printf("\n\n");
+	}
 }
