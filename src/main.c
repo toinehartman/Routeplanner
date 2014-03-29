@@ -10,8 +10,6 @@
 #include "data.h"
 #include "functions.h"
 
-#define START_CP	1
-
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
 	int i, j, *cp, *new_cp, cp_num, a;
@@ -73,7 +71,8 @@ int main(int argc, char* argv[]) {
 	link_nodes();
 	print_field();
 
-	if (fixed_order != 0) {
+	if (fixed_order) {
+		/* sort cp on shortest route */
 		short_sort(cp, cp_num);
 
 		printf("-------\nSorted!\n");
@@ -87,6 +86,8 @@ int main(int argc, char* argv[]) {
 		printf("\n\n");
 	}
 
+	read_mines(1);
+	/* go through all checkpoints */
 	route_sequence(cp, cp_num);
 
 	return 0;

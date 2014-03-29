@@ -1,11 +1,10 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "data.h"
 #include "functions.h"
+
+#define START_CP	1
 
 extern int cp_num;
 extern int cp;

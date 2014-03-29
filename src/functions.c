@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
+// #include <math.h>
 
 #include "main.h"
 #include "data.h"
@@ -289,5 +289,75 @@ void route_sequence(int *checks, int checks_num) {
 	for (i = 0; i < checks_num - 1; i++) {
 		get_route(checkpoint_to_coord(checks[i]), checkpoint_to_coord(checks[i + 1]));
 		printf("\n\n");
+	}
+}
+
+void read_mines(int verbose) {
+	FILE *mine_f;
+	mine_f = fopen("./mines.txt", "r");
+	char c;
+	int i = 0;
+	coord a, b;
+
+	if (mine_f == NULL) {
+		if (verbose) printf("Mine file not found!\n");
+		if (verbose) printf("Continuing without mines...\n");
+	}
+	else {
+		if (verbose) printf("MINES:\n----------------\n");
+		while ((c = fgetc(mine_f)) != EOF) {
+			i++;
+			if (c != ' ' && c != '\n') {
+				switch(i) {
+					case 1:
+					a.x = c - '0';
+					break;
+
+					case 2:
+					a.y = c - '0';
+					break;
+
+					case 4:
+					b.x = c - '0';
+					break;
+
+					case 5:
+					b.y = c - '0';
+					break;
+
+					default:
+					printf("ERROR: i = %d", i);
+				}
+			}
+			else if (c == '\n') {
+				if (verbose) printf("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
+				place_mine(a, b);
+				i = 0;
+			}
+		}
+		if (verbose) printf("----------------\n\n");
+	}
+}
+
+void place_mine(coord a, coord b) {
+	if (a.x == b.x) {
+		if (a.y < b.y) {
+			field[a.x][a.y].up = NULL;
+			field[b.x][b.y].down = NULL;
+		}
+		else if (a.y > b.y) {
+			field[a.x][a.y].down = NULL;
+			field[b.x][b.y].up = NULL;
+		}
+	}
+	else if (a.y == b.y) {
+		if (a.x < b.x) {
+			field[a.x][a.y].right = NULL;
+			field[b.x][b.y].left = NULL;
+		}
+		else if (a.x > b.x) {
+			field[a.x][a.y].left = NULL;
+			field[b.x][b.y].right = NULL;
+		}
 	}
 }
