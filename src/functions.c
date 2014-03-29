@@ -178,7 +178,7 @@ void get_route(coord from, coord to) {
 
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
-	printf("Length of shortest route: %d\n", route_len(from, to));
+	printf("Length of shortest route: %d\n", len);
 	// printf("\n");
 
 	current = to;
@@ -192,16 +192,14 @@ void get_route(coord from, coord to) {
 		route[z] = current;
 		z++;
 
-		node *neighbours[] = { field[current.x][current.y].up,
-				field[current.x][current.y].down,
-				field[current.x][current.y].right,
-				field[current.x][current.y].left };
+		node *neighbours[] = {	field[current.x][current.y].up,
+								field[current.x][current.y].down,
+								field[current.x][current.y].right,
+								field[current.x][current.y].left};
 		for (j = 0; j <= 3; j++)
-			if (neighbours[j]
-					&& (!min_mark || neighbours[j]->mark < min_mark)) {
+			if (neighbours[j] && (!min_mark || neighbours[j]->mark < min_mark)) {
 				min_mark = neighbours[j]->mark;
-				min_coords.x = neighbours[j]->coords.x;
-				min_coords.y = neighbours[j]->coords.y;
+				min_coords = neighbours[j]->coords;
 			}
 		current = min_coords;
 	}
@@ -337,6 +335,8 @@ void read_mines(int verbose) {
 		}
 		if (verbose) printf("----------------\n\n");
 	}
+
+	fclose(mine_f);
 }
 
 void place_mine(coord a, coord b) {
