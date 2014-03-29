@@ -178,7 +178,7 @@ void get_route(coord from, coord to) {
 
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
-	printf("Length of shortest route: %d\n", route_len(from, to));
+	printf("Length of shortest route: %d\n", len);
 	// printf("\n");
 
 	current = to;
@@ -337,6 +337,8 @@ void read_mines(int verbose) {
 		}
 		if (verbose) printf("----------------\n\n");
 	}
+
+	fclose(mine_f);
 }
 
 void place_mine(coord a, coord b) {
