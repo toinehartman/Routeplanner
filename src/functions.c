@@ -6,6 +6,7 @@
 #include "main.h"
 #include "data.h"
 #include "functions.h"
+#include "zigbee.h"
 
 node field[XDIM][YDIM]; /* initialize the field */
 char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "14", "03", "02", "01" }; /* item i in this array is */
