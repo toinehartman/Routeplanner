@@ -9,6 +9,7 @@
 #include "main.h"
 #include "data.h"
 #include "functions.h"
+// #include "zigbee.h"
 
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
@@ -86,7 +87,8 @@ int main(int argc, char* argv[]) {
 		printf("\n\n");
 	}
 
-	read_mines(1);
+	if (read_mines(1) == 1) printf("No mine file!\n");
+	
 	/* go through all checkpoints */
 	route_sequence(cp, cp_num);
 

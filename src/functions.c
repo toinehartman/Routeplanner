@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <math.h>
+#include <math.h>
 
 #include "main.h"
 #include "data.h"
@@ -195,7 +195,9 @@ void get_route(coord from, coord to) {
 		node *neighbours[] = {	field[current.x][current.y].up,
 								field[current.x][current.y].down,
 								field[current.x][current.y].right,
-								field[current.x][current.y].left};
+								field[current.x][current.y].left
+							};
+
 		for (j = 0; j <= 3; j++)
 			if (neighbours[j] && (!min_mark || neighbours[j]->mark < min_mark)) {
 				min_mark = neighbours[j]->mark;
@@ -209,7 +211,8 @@ void get_route(coord from, coord to) {
 	for (j = len; j >= 0; j--) {
 		if (route[j].x != -1) {
 			printf("(%d, %d)", route[j].x, route[j].y);
-			if (j) printf(" ▷ ");
+			if (j > 0) printf(" ▷ [%c]", drive_direction(route[j - 1], route[j], route[j + 1]));
+			else if (j == 1) printf(" ▷ [%c]", drive_direction(route[j - 1], route[j], route[j]));
 			else printf("\n");
 		}
 	}
@@ -290,7 +293,7 @@ void route_sequence(int *checks, int checks_num) {
 	}
 }
 
-void read_mines(int verbose) {
+int read_mines(int verbose) {
 	FILE *mine_f;
 	mine_f = fopen("./mines.txt", "r");
 	char c;
@@ -300,6 +303,7 @@ void read_mines(int verbose) {
 	if (mine_f == NULL) {
 		if (verbose) printf("Mine file not found!\n");
 		if (verbose) printf("Continuing without mines...\n");
+		return 1;
 	}
 	else {
 		if (verbose) printf("MINES:\n----------------\n");
@@ -308,23 +312,19 @@ void read_mines(int verbose) {
 			if (c != ' ' && c != '\n') {
 				switch(i) {
 					case 1:
-					a.x = c - '0';
-					break;
-
+						a.x = c - '0';
+						break;
 					case 2:
-					a.y = c - '0';
-					break;
-
+						a.y = c - '0';
+						break;
 					case 4:
-					b.x = c - '0';
-					break;
-
+						b.x = c - '0';
+						break;
 					case 5:
-					b.y = c - '0';
-					break;
-
+						b.y = c - '0';
+						break;
 					default:
-					printf("ERROR: i = %d", i);
+						printf("ERROR: i = %d", i);
 				}
 			}
 			else if (c == '\n') {
@@ -337,6 +337,7 @@ void read_mines(int verbose) {
 	}
 
 	fclose(mine_f);
+	return 0;
 }
 
 void place_mine(coord a, coord b) {
@@ -361,3 +362,35 @@ void place_mine(coord a, coord b) {
 		}
 	}
 }
+
+char drive_direction(coord past, coord now, coord to) {
+	/* 	's': straight
+		'b': back
+		'r': right
+		'l': left */
+
+	int init_dir = compass_direction(past, now), new_dir = compass_direction(now, to);
+	
+	if (init_dir == new_dir)
+		return 's';
+	else if (init_dir % 2 == new_dir % 2)
+		return 'b';
+	// printf("(init_dir - new_dir) %% 4 = %d", (init_dir - new_dir) % 4);
+	return (init_dir - new_dir) % 4 == 3 ? 'l' : 'r';
+}
+
+int compass_direction(coord from, coord to) {
+	/* returns '0' (north), '1' (east), '2' (south), '3' (west) */
+	/* if this returns -1, something went terribly wrong */
+
+	if (from.x == to.x)
+		return from.y < to.y ? 0 : 2;
+	else if (from.y == to.y)
+		return from.x < to.x ? 1 : 3;
+	return -1;
+}
+
+
+
+
+

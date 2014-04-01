@@ -24,7 +24,9 @@ void print_route_marks();
 int route_len(coord a, coord b);
 void short_sort(int *check, int num);
 void route_sequence(int *checks, int checks_num);
-void read_mines();
+int read_mines();
 void place_mine(coord a, coord b);
+char drive_direction(coord past, coord now, coord to);
+int compass_direction(coord from, coord to);
 
-#endif
+#endif /* FUNCTIONS_H */
