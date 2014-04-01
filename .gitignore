@@ -1,3 +1,6 @@
+# ignore
+*.ign
+
 # Object files
 *.o
 *.ko
@@ -42,3 +45,8 @@ Icon
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
+
+# Code::Blocks project files
+*.cbp
+*.depend
+
