@@ -223,11 +223,11 @@ void get_route(coord from, coord to) {
 void route_marks(coord from, coord to) {
 	int finished, i, x, y;
 
-	/* clear ecerything first */
+	/* clear everything first */
 	clear_marks();
 
-	field[from.x][from.y].mark = 1;
 	i = 1;
+	field[from.x][from.y].mark = i;
 	finished = 0;
 
 	while (!finished) {

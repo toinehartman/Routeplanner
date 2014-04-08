@@ -49,4 +49,4 @@ Icon
 # Code::Blocks project files
 *.cbp
 *.depend
-
+*.layout

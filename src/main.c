@@ -9,11 +9,54 @@
 #include "main.h"
 #include "data.h"
 #include "functions.h"
-// #include "zigbee.h"
 
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
 	int i, j, *cp, *new_cp, cp_num, a;
+
+	/* ZigBee initialisations */
+	HANDLE hSerial;
+
+
+    char byteBuffer[BUFSIZ+1];
+
+    //----------------------------------------------------------
+    // Open COMPORT for reading and writing
+    //----------------------------------------------------------
+    hSerial = CreateFile(COMPORT,
+        GENERIC_READ | GENERIC_WRITE,
+        0,
+        0,
+        OPEN_EXISTING,
+        FILE_ATTRIBUTE_NORMAL,
+        0
+    );
+
+    if(hSerial == INVALID_HANDLE_VALUE){
+        if(GetLastError()== ERROR_FILE_NOT_FOUND){
+            //serial port does not exist. Inform user.
+            printf(" serial port does not exist \n");
+        }
+        //some other error occurred. Inform user.
+        printf(" some other error occured. Inform user.\n");
+    }
+
+    //----------------------------------------------------------
+    // Initialize the parameters of the COM port
+    //----------------------------------------------------------
+
+    initSio(hSerial);
+
+    while ( 1 ) {
+        gets(byteBuffer);
+
+        if (byteBuffer[0] == 'q') // end the loop by typing 'q'
+            break;
+
+        writeByte(hSerial, byteBuffer);
+        readByte(hSerial, byteBuffer);
+    }
+    /* end of zigbee part */
 	
 	cp_num = argc - 1;
 
@@ -92,5 +135,6 @@ int main(int argc, char* argv[]) {
 	/* go through all checkpoints */
 	route_sequence(cp, cp_num);
 
+	CloseHandle(hSerial);
 	return 0;
 }
