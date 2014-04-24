@@ -10,6 +10,8 @@
 #include "data.h"
 #include "functions.h"
 
+int verbosity = 0;
+
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
 	int i, j, *cp, *new_cp, cp_num, a;
@@ -87,7 +89,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	if (read_mines(1) == 1) printf("No mine file!\n");
-	
+
 	/* go through all checkpoints */
 	route_sequence(cp, cp_num);
 
