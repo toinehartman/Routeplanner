@@ -28,5 +28,6 @@ int read_mines();
 void place_mine(coord a, coord b);
 char drive_direction(coord past, coord now, coord to);
 int compass_direction(coord from, coord to);
+char *compass_int(int comp);
 
 #endif /* FUNCTIONS_H */
