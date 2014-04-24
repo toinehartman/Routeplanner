@@ -8,7 +8,7 @@
 
 extern int cp_num;
 extern int cp;
-extern int verbosity;
+extern int verbose;
 
 int main(int argc, char* argv[]);
 

@@ -10,7 +10,7 @@
 #include "data.h"
 #include "functions.h"
 
-int verbosity = 0;
+int verbose = 0;
 
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;

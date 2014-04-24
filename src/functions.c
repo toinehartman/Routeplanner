@@ -246,14 +246,26 @@ void get_route(coord from, coord to) {
 
 			if (j == first)
 				printf(" ▷ (%d, %d)\n", route[j].x, route[j].y);
-			else if (j == 0)
-				printf(" ▷ (%d, %d) [curr: %s]\n\n", route[j].x, route[j].y, compass_int(compass_direction(route[j + 1], route[j])));
-			else if (j == len - 1)
-				printf(" ▷ (%d, %d) [curr: %s]\n", route[j].x, route[j].y, compass_int(compass_direction(route[j + 1], route[j])));
-			else if (j <= len - 2)
-				printf(" ▷ [%c](%d, %d) [prev: %s][curr: %s]\n", drive_direction(route[j + 2], route[j + 1], route[j], verbosity), route[j].x, route[j].y, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
-			else /* vreemd, kan niet gebeuren */
-				printf("ERROR in route-array (j: %d)(len - j: %d\n", j, len - j);
+			else if (j == 0) {
+				printf(" ▷ (%d, %d)", route[j].x, route[j].y);
+				if (verbose) printf(" [curr: %s]", compass_int(compass_direction(route[j + 1], route[j])));
+				printf("\n");
+			}
+			else if (j == len - 1) {
+				printf(" ▷ (%d, %d)", route[j].x, route[j].y);
+				if (verbose) printf(" [curr: %s]", compass_int(compass_direction(route[j + 1], route[j])));
+				printf("\n");
+			}
+			else if (j <= len - 2) {
+				printf(" ▷ (%d, %d)[%c]", route[j].x, route[j].y, drive_direction(route[j + 2], route[j + 1], route[j]));
+				if (verbose) printf(" [prev: %s][curr: %s]", compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
+				printf("\n");
+			}
+			else {
+				printf("ERROR in route-array!");
+				if (verbose) printf(" (j: %d)(len - j: %d", j, len - j);
+				printf("\n");
+			} /* vreemd, kan eigenlijk niet gebeuren */
 		}
 	}
 
@@ -333,7 +345,7 @@ void route_sequence(int *checks, int checks_num) {
 	}
 }
 
-int read_mines(int verbose) {
+int read_mines() {
 	FILE *mine_f;
 	mine_f = fopen(mine_file, "r");
 	char c;
@@ -403,7 +415,7 @@ void place_mine(coord a, coord b) {
 	}
 }
 
-char drive_direction(coord past, coord now, coord to, int verbose) {
+char drive_direction(coord past, coord now, coord to) {
 	/* 	's': straight
 		'b': back
 		'r': right
