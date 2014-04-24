@@ -9,6 +9,7 @@
 
 node field[XDIM][YDIM]; /* initialize the field */
 char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "14", "03", "02", "01" }; /* item i in this array is */
+char mine_file[] = "./mines.txt";
 
 static const int roadValue = 1;		/* time-value of driving the length of a road */
 static const int cornerValue = 2;	/* time value of making a 90-degree turn */
@@ -166,6 +167,7 @@ void clear_marks() {
 /* find the shortest route from coord 'from' to coord 'to' */
 void get_route(coord from, coord to) {
 	int start_cp, end_cp, j, min_mark = 0, z = 0, len;
+	int first = -1, prev, curr;
 
 	coord min_coords;
 	coord route[40];
@@ -178,7 +180,7 @@ void get_route(coord from, coord to) {
 
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
-	printf("Length of shortest route: %d\n", len);
+	printf("Length of shortest route: %d\n\n", len);
 	// printf("\n");
 
 	current = to;
@@ -208,12 +210,50 @@ void get_route(coord from, coord to) {
 
 	route[z] = current;
 
-	for (j = len; j >= 0; j--) {
+/*	for (j = len; j > 0; j--) {
 		if (route[j].x != -1) {
+			if (first == -1) first = j;
+
 			printf("(%d, %d)", route[j].x, route[j].y);
-			if (j > 0) printf(" ▷ [%c]", drive_direction(route[j - 1], route[j], route[j + 1]));
-			else if (j == 1) printf(" ▷ [%c]", drive_direction(route[j - 1], route[j], route[j]));
-			else printf("\n");
+			if (j == first) printf(" ▷ [%d]", compass_direction(route[j], route[j - 1]));
+			else if (j == 0) printf(" ▷ [%d]", compass_direction(route[j], route[j - 1]));
+			else printf(" ▷ [%d][%d]", compass_direction(route[j + 1], route[j]), compass_direction(route[j], route[j - 1]));
+		}
+	}
+*/
+
+/*	for (j = len; j > 0; j--) {
+		if (route[j].x != -1) {
+			if (first == -1) first = j;
+
+			if (j == first)
+				printf("(%d, %d)\n", route[j].x, route[j].y);
+			else if (j == 0)
+				printf(" ▷ [curr: %d](%d, %d)\n\n", compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
+			else if (j == len - 1)
+				printf(" ▷ [curr: %d](%d, %d)\n", compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
+			else if (j <= len - 2)
+				printf(" ▷ [prev: %d][curr: %d](%d, %d)\n", compass_direction(route[j + 2], route[j + 1]), compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
+			else
+				printf("BIER (j: %d)(len - j: %d\n", j, len - j);
+		}
+	}
+*/
+
+	for (j = len; j > 0; j--) {
+		if (route[j].x != -1) {
+			if (first == -1) first = j;
+
+			if (j == first)
+				printf(" ▷ (%d, %d)\n", route[j].x, route[j].y);
+			else if (j == 0)
+				printf(" ▷ (%d, %d) [curr: %s]\n\n", route[j].x, route[j].y, compass_int(compass_direction(route[j + 1], route[j])));
+			else if (j == len - 1)
+				printf(" ▷ (%d, %d) [curr: %s]\n", route[j].x, route[j].y, compass_int(compass_direction(route[j + 1], route[j])));
+			else if (j <= len - 2)
+				printf(" ▷ [%c](%d, %d) [prev: %s][curr: %s]\n", drive_direction(route[j + 2], route[j + 1], route[j], verbosity), route[j].x, route[j].y, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
+			else /* vreemd, kan niet gebeuren */
+				printf("ERROR in route-array (j: %d)(len - j: %d\n", j, len - j);
 		}
 	}
 
@@ -295,7 +335,7 @@ void route_sequence(int *checks, int checks_num) {
 
 int read_mines(int verbose) {
 	FILE *mine_f;
-	mine_f = fopen("./mines.txt", "r");
+	mine_f = fopen(mine_file, "r");
 	char c;
 	int i = 0;
 	coord a, b;
@@ -363,7 +403,7 @@ void place_mine(coord a, coord b) {
 	}
 }
 
-char drive_direction(coord past, coord now, coord to) {
+char drive_direction(coord past, coord now, coord to, int verbose) {
 	/* 	's': straight
 		'b': back
 		'r': right
@@ -375,8 +415,15 @@ char drive_direction(coord past, coord now, coord to) {
 		return 's';
 	else if (init_dir % 2 == new_dir % 2)
 		return 'b';
-	// printf("(init_dir - new_dir) %% 4 = %d", (init_dir - new_dir) % 4);
-	return (init_dir - new_dir) % 4 == 3 ? 'l' : 'r';
+	else if ((init_dir - new_dir) % 4 == 3 || (init_dir - new_dir) % 4 == -1) return 'r';
+	else if ((init_dir - new_dir) % 4 == 1 || (init_dir - new_dir) % 4 == -3) return 'l';
+	else {
+		if (verbose) printf("init: %d, new: %d\n", init_dir, new_dir);
+		if (verbose) printf("(init_dir - new_dir) %% 4 = %d\n", (init_dir - new_dir) % 4);
+		return 'x';
+	}
+
+	// return (init_dir - new_dir) % 4 == 3 ? 'r' : 'l';
 }
 
 int compass_direction(coord from, coord to) {
@@ -388,6 +435,25 @@ int compass_direction(coord from, coord to) {
 	else if (from.y == to.y)
 		return from.x < to.x ? 1 : 3;
 	return -1;
+}
+
+char *compass_int(int comp) {
+	switch(comp) {
+		case 0:
+		return "N";
+
+		case 1:
+		return "E";
+
+		case 2:
+		return "S";
+
+		case 3:
+		return "W";
+
+		default:
+		return "!";
+	}
 }
 
 

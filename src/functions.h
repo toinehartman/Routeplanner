@@ -26,7 +26,8 @@ void short_sort(int *check, int num);
 void route_sequence(int *checks, int checks_num);
 int read_mines();
 void place_mine(coord a, coord b);
-char drive_direction(coord past, coord now, coord to);
+char drive_direction(coord past, coord now, coord to, int verbose);
 int compass_direction(coord from, coord to);
+char *compass_int(int comp);
 
 #endif /* FUNCTIONS_H */
