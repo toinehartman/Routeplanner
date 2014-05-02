@@ -10,7 +10,11 @@
 #include "data.h"
 #include "functions.h"
 
-int verbose = 0;
+#ifdef DEBUG
+	int verbose = 1;
+#else
+	int verbose = 0;
+#endif
 
 int main(int argc, char* argv[]) {
 	int fixed_order = 0;
