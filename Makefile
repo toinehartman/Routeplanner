@@ -25,23 +25,27 @@ DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 # link all .o files together
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	@$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
-	@echo "$(BINDIR)/$(TARGET)"
+	$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
 
 # compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
-	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
-	@$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
-	@echo "$*.c ==> $*.o"
+	gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
+	$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
 
 # remove object and dependency files
 clean:
-	@rm -f $(BINDIR)/$(TARGET) $(OBJECTS) $(OBJDIR)/*.d
-	@echo "All object and dependency files removed!"
+	rm -rf $(BINDIR)/$(TARGET) $(OBJECTS) $(DEPENDENCIES)
+	rm -rf $(BINDIR) $(OBJDIR)
 
 # run the program with given arguments
 run: $(BINDIR)/$(TARGET)
-	@echo "Running $(BINDIR)/$(TARGET)..."
-	@clear
-	@./$(BINDIR)/$(TARGET) 1 3 11 5
+	./$(BINDIR)/$(TARGET) 1 3 11 5
+
+# create archive with source code
+release:
+	tar -czvf routeplanner.tgz --exclude=*.tgz --exclude=bin --exclude=obj --exclude=.* *
+
+# install binary to /usr/local/bin
+install: $(BINDIR)/$(TARGET)
+	sudo cp $(BINDIR)/$(TARGET) /usr/local/bin/routeplanner

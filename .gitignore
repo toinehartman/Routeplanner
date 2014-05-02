@@ -1,5 +1,5 @@
-# ignore
-*.ign
+# Archives
+*.tgz
 
 # Object files
 *.o
@@ -21,7 +21,6 @@
 # Folders
 obj/
 bin/
-depr/
 
 # Executables
 *.exe
