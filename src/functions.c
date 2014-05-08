@@ -350,7 +350,7 @@ int read_mines() {
 			}
 			else if (c == '\n') {
 				if (verbose) printf("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
-				place_mine(a, b);
+				save_mine(a, b);
 				i = 0;
 			}
 		}
@@ -361,7 +361,7 @@ int read_mines() {
 	return 0;
 }
 
-void place_mine(coord a, coord b) {
+void save_mine(coord a, coord b) {
 	if (a.x == b.x) {
 		if (a.y < b.y) {
 			field[a.x][a.y].up = NULL;
