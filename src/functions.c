@@ -98,7 +98,6 @@ void print_field() {
 	printf("\n");
 }
 
-
 /* print all the neighbours of a specific node, function not necessarn.y but used for testing */
 void find_neighbours(coord n) {
 	printf("N:\t%s {%d}\n", field[n.x][n.y].name, field[n.x][n.y].checkpoint);
@@ -209,36 +208,6 @@ void get_route(coord from, coord to) {
 	}
 
 	route[z] = current;
-
-/*	for (j = len; j > 0; j--) {
-		if (route[j].x != -1) {
-			if (first == -1) first = j;
-
-			printf("(%d, %d)", route[j].x, route[j].y);
-			if (j == first) printf(" ▷ [%d]", compass_direction(route[j], route[j - 1]));
-			else if (j == 0) printf(" ▷ [%d]", compass_direction(route[j], route[j - 1]));
-			else printf(" ▷ [%d][%d]", compass_direction(route[j + 1], route[j]), compass_direction(route[j], route[j - 1]));
-		}
-	}
-*/
-
-/*	for (j = len; j > 0; j--) {
-		if (route[j].x != -1) {
-			if (first == -1) first = j;
-
-			if (j == first)
-				printf("(%d, %d)\n", route[j].x, route[j].y);
-			else if (j == 0)
-				printf(" ▷ [curr: %d](%d, %d)\n\n", compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
-			else if (j == len - 1)
-				printf(" ▷ [curr: %d](%d, %d)\n", compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
-			else if (j <= len - 2)
-				printf(" ▷ [prev: %d][curr: %d](%d, %d)\n", compass_direction(route[j + 2], route[j + 1]), compass_direction(route[j + 1], route[j]), route[j].x, route[j].y);
-			else
-				printf("BIER (j: %d)(len - j: %d\n", j, len - j);
-		}
-	}
-*/
 
 	for (j = len; j > 0; j--) {
 		if (route[j].x != -1) {
