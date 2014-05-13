@@ -22,6 +22,8 @@ INCLUDES	:= $(wildcard $(SRCDIR)/*.h)
 OBJECTS 	:= $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 
+default: run
+
 # link all .o files together
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
@@ -30,12 +32,11 @@ $(BINDIR)/$(TARGET): $(OBJECTS)
 # compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
-	gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
+	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
 	$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
 
 # remove object and dependency files
 clean:
-	rm -rf $(BINDIR)/$(TARGET) $(OBJECTS) $(DEPENDENCIES)
 	rm -rf $(BINDIR) $(OBJDIR)
 
 # run the program with given arguments
