@@ -65,7 +65,6 @@ int main(int argc, char* argv[]) {
 	link_nodes();
 	print_field();
 
-	/* sort cp on shortest route */
 	short_sort(cp, cp_num);
 
 	printf("-------\nSorted!\n");
@@ -74,7 +73,6 @@ int main(int argc, char* argv[]) {
 
 	if (read_mines(1) == 1) printf("No mine file!\n");
 
-	/* go through all checkpoints */
 	route_sequence(cp, cp_num);
 
 	return 0;

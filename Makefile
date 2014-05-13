@@ -3,14 +3,12 @@
 # name of executable output file in $(BINDIR)
 TARGET		= routeplanner.out
 
-CC			= gcc -c
+CC			= gcc
 # flags for gcc compiler
-CFLAGS		= -O3
-
-LINKER		= gcc -o
+CFLAGS		+=
 
 # flags for gcc linker
-LFLAGS		= -lm -O3
+LDFLAGS		= -lm
 
 # directories for source, object and binary file(s)
 SRCDIR		= src
@@ -27,13 +25,16 @@ default: run
 # link all .o files together
 $(BINDIR)/$(TARGET): $(OBJECTS)
 	@mkdir -p $(BINDIR)
-	$(LINKER) $(BINDIR)/$(TARGET) $(LFLAGS) $(OBJECTS)
+	$(CC) -o $(BINDIR)/$(TARGET) $(LDFLAGS) $(OBJECTS)
 
 # compile and generate dependency (.d) file for each .c file
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	@mkdir -p $(DEPDIR) $(OBJDIR)
 	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
-	$(CC) $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
+	$(CC) -c $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
+
+debug:
+	CFLAGS="-DDEBUG" make
 
 # remove object and dependency files
 clean:

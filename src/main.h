@@ -5,6 +5,11 @@
 #include "functions.h"
 
 #define START_CP	1
+#ifdef DEBUG
+	#define printfv printf
+#else
+	#define printfv
+#endif
 
 extern int cp_num;
 extern int cp;

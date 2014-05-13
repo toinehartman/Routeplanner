@@ -186,7 +186,6 @@ void get_route(coord from, coord to, int init_dir) {
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
 	printf("Length of shortest route: %d\n\n", len);
-	// printf("\n");
 
 	current = to;
 
@@ -220,25 +219,20 @@ void get_route(coord from, coord to, int init_dir) {
 			if (first == -1) first = j;
 	
 			if (j == first) {
-				if (verbose) printf("init_dir: %d\n", init_dir);
+				printfv("init_dir: %d\n", init_dir);
 				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(init_dir, route[j], route[j - 1]));
-				if (verbose) printf("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(init_dir));
+				printfv("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(init_dir));
 				printf("\n");
 			}
-			// else if (j == len - 1) {
-			// 	printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, );
-			// 	if (verbose) printf("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(compass_direction(route[j + 1], route[j])));
-			// 	printf("\n");
-			// }
 			else if (j <= len - 1) {
 				prev_dir = compass_direction(route[j + 1], route[j]);
 				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(prev_dir, route[j], route[j - 1]));
-				if (verbose) printf("(j: %d)(len - j: %d)[prev: %c][curr: %c]", j, len - j, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
+				printfv("(j: %d)(len - j: %d)[prev: %c][curr: %c]", j, len - j, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
 				printf("\n");
 			}
 			else { /* vreemd, kan eigenlijk niet gebeuren */
 				printf("ERROR in route-array!");
-				if (verbose) printf("(j: %d)(len - j: %d)", j, len - j);
+				printfv("(j: %d)(len - j: %d)", j, len - j);
 				printf("\n");
 			}
 		}
@@ -328,12 +322,11 @@ int read_mines() {
 	coord a, b;
 
 	if (mine_f == NULL) {
-		if (verbose) printf("Mine file not found!\n");
-		if (verbose) printf("Continuing without mines...\n");
+		printfv("Mine file not found!\nContinuing without mines...\n");
 		return 1;
 	}
 	else {
-		if (verbose) printf("MINES:\n----------------\n");
+		printfv("MINES:\n----------------\n");
 		while ((c = fgetc(mine_f)) != EOF) {
 			i++;
 			if (c != ' ' && c != '\n') {
@@ -355,14 +348,13 @@ int read_mines() {
 				}
 			}
 			else if (c == '\n') {
-				if (verbose) printf("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
+				printfv("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
 				save_mine(a, b);
 				i = 0;
 			}
 		}
-		if (verbose) printf("----------------\n\n");
+		printfv("----------------\n\n");
 	}
-
 	fclose(mine_f);
 	return 0;
 }
@@ -390,29 +382,6 @@ void save_mine(coord a, coord b) {
 	}
 }
 
-// char drive_direction(coord past, coord now, coord to) {
-// 	/* 	's': straight
-// 		'b': back
-// 		'r': right
-// 		'l': left */
-
-// 	int init_dir = compass_direction(past, now), new_dir = compass_direction(now, to);
-	
-// 	if (init_dir == new_dir)
-// 		return 's';
-// 	else if (init_dir % 2 == new_dir % 2)
-// 		return 'b';
-// 	else if ((init_dir - new_dir) % 4 == 3 || (init_dir - new_dir) % 4 == -1) return 'r';
-// 	else if ((init_dir - new_dir) % 4 == 1 || (init_dir - new_dir) % 4 == -3) return 'l';
-// 	else {
-// 		if (verbose) printf("init: %d, new: %d\n", init_dir, new_dir);
-// 		if (verbose) printf("(init_dir - new_dir) %% 4 = %d\n", (init_dir - new_dir) % 4);
-// 		return 'x';
-// 	}
-
-// 	// return (init_dir - new_dir) % 4 == 3 ? 'r' : 'l';
-// }
-
 char drive_direction(int prev_dir, coord now, coord to) {
 	int new_dir = compass_direction(now, to);
 
@@ -428,8 +397,8 @@ char drive_direction(int prev_dir, coord now, coord to) {
 	else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
 	else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
 	else {
-		if (verbose) printf("prev: %d, new: %d\n", prev_dir, new_dir);
-		if (verbose) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
+		printfv("prev: %d, new: %d\n", prev_dir, new_dir);
+		printfv("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
 		return 'x';
 	}
 }
