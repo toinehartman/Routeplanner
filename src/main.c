@@ -10,25 +10,13 @@
 #include "data.h"
 #include "functions.h"
 
-#ifdef DEBUG
-	int verbose = 1;
-#else
-	int verbose = 0;
-#endif
+int verbose = 0;
 
 int main(int argc, char* argv[]) {
-	int fixed_order = 0;
 	int i, j, *cp, *new_cp, cp_num, a;
 	
 	cp_num = argc - 1;
-
-	for (i = 0; i < argc; i++) {
-		if (strncmp(argv[i], "--fixed", 7))
-			fixed_order = 1;
-	}
-
 	cp = (int*) calloc(cp_num, sizeof(int));
-	// printf("cp created, %d elements of %ld bytes\n", cp_num, sizeof(int));
 
 	if (cp_num >= 1) { /* als checkpoints in argument zijn meegegeven, deze gebruiken */
 		for (i = 0; i < cp_num; i++) {
@@ -77,20 +65,12 @@ int main(int argc, char* argv[]) {
 	link_nodes();
 	print_field();
 
-	if (fixed_order) {
-		/* sort cp on shortest route */
-		short_sort(cp, cp_num);
+	/* sort cp on shortest route */
+	short_sort(cp, cp_num);
 
-		printf("-------\nSorted!\n");
-		for (j = 0; j < cp_num; j++)
-			printf("%d ", cp[j]);
-		printf("\n-------\n\n");
-	}
-	else {
-		for (i = 0; i < cp_num; i++)
-			printf("%d ", cp[i]);
-		printf("\n\n");
-	}
+	printf("-------\nSorted!\n");
+	for (j = 0; j < cp_num; j++) printf("%d ", cp[j]);
+	printf("\n-------\n\n");
 
 	if (read_mines(1) == 1) printf("No mine file!\n");
 
