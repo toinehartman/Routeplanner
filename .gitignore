@@ -1,19 +1,6 @@
 # Object files
 *.o
-*.ko
-*.obj
-*.elf
 *.d
-
-# Libraries
-*.lib
-*.a
-
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
 
 # Folders
 obj/
@@ -22,10 +9,6 @@ bin/
 # Executables
 *.exe
 *.out
-*.app
-*.i*86
-*.x86_64
-*.hex
 
 ## Mac OSX specific
 .DS_Store
