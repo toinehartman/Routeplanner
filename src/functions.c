@@ -15,6 +15,12 @@ static const int roadValue = 1;		/* time-value of driving the length of a road *
 static const int cornerValue = 2;	/* time value of making a 90-degree turn */
 static coord current;
 
+/*
+Straight means: drive until next real joint.
+Backwwards means: turn around until line is seen second time and drive to next real joint.
+Other directions mean: turn to that side until line found and drive to next real joint.
+*/
+
 /* returns coord struct from given coordinates */
 coord return_coord(int x, int y) {
 	coord c;
@@ -164,8 +170,8 @@ void clear_marks() {
 }
 
 /* find the shortest route from coord 'from' to coord 'to' */
-void get_route(coord from, coord to) {
-	int start_cp, end_cp, j, min_mark = 0, z = 0, len;
+void get_route(coord from, coord to, int init_dir) {
+	int start_cp, end_cp, j, min_mark = 0, z = 0, len, prev_dir;
 	int first = -1, prev, curr;
 
 	coord min_coords;
@@ -212,29 +218,29 @@ void get_route(coord from, coord to) {
 	for (j = len; j > 0; j--) {
 		if (route[j].x != -1) {
 			if (first == -1) first = j;
-
-			if (j == first)
-				printf(" ▷ (%d, %d)\n", route[j].x, route[j].y);
-			else if (j == 0) {
-				printf(" ▷ (%d, %d)", route[j].x, route[j].y);
-				if (verbose) printf(" [curr: %s]", compass_int(compass_direction(route[j + 1], route[j])));
+	
+			if (j == first) {
+				if (verbose) printf("init_dir: %d\n", init_dir);
+				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(init_dir, route[j], route[j - 1]));
+				if (verbose) printf("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(init_dir));
 				printf("\n");
 			}
-			else if (j == len - 1) {
-				printf(" ▷ (%d, %d)", route[j].x, route[j].y);
-				if (verbose) printf(" [curr: %s]", compass_int(compass_direction(route[j + 1], route[j])));
+			// else if (j == len - 1) {
+			// 	printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, );
+			// 	if (verbose) printf("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(compass_direction(route[j + 1], route[j])));
+			// 	printf("\n");
+			// }
+			else if (j <= len - 1) {
+				prev_dir = compass_direction(route[j + 1], route[j]);
+				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(prev_dir, route[j], route[j - 1]));
+				if (verbose) printf("(j: %d)(len - j: %d)[prev: %c][curr: %c]", j, len - j, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
 				printf("\n");
 			}
-			else if (j <= len - 2) {
-				printf(" ▷ (%d, %d)[%c]", route[j].x, route[j].y, drive_direction(route[j + 2], route[j + 1], route[j]));
-				if (verbose) printf(" [prev: %s][curr: %s]", compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
-				printf("\n");
-			}
-			else {
+			else { /* vreemd, kan eigenlijk niet gebeuren */
 				printf("ERROR in route-array!");
-				if (verbose) printf(" (j: %d)(len - j: %d", j, len - j);
+				if (verbose) printf("(j: %d)(len - j: %d)", j, len - j);
 				printf("\n");
-			} /* vreemd, kan eigenlijk niet gebeuren */
+			}
 		}
 	}
 
@@ -309,8 +315,8 @@ void route_sequence(int *checks, int checks_num) {
 	int i;
 
 	for (i = 0; i < checks_num - 1; i++) {
-		get_route(checkpoint_to_coord(checks[i]), checkpoint_to_coord(checks[i + 1]));
-		printf("\n\n");
+		get_route(checkpoint_to_coord(checks[i]), checkpoint_to_coord(checks[i + 1]), cp_direction(checks[i]));
+		if (i < checks_num - 2) printf("\n\n");
 	}
 }
 
@@ -384,27 +390,48 @@ void save_mine(coord a, coord b) {
 	}
 }
 
-char drive_direction(coord past, coord now, coord to) {
+// char drive_direction(coord past, coord now, coord to) {
+// 	/* 	's': straight
+// 		'b': back
+// 		'r': right
+// 		'l': left */
+
+// 	int init_dir = compass_direction(past, now), new_dir = compass_direction(now, to);
+	
+// 	if (init_dir == new_dir)
+// 		return 's';
+// 	else if (init_dir % 2 == new_dir % 2)
+// 		return 'b';
+// 	else if ((init_dir - new_dir) % 4 == 3 || (init_dir - new_dir) % 4 == -1) return 'r';
+// 	else if ((init_dir - new_dir) % 4 == 1 || (init_dir - new_dir) % 4 == -3) return 'l';
+// 	else {
+// 		if (verbose) printf("init: %d, new: %d\n", init_dir, new_dir);
+// 		if (verbose) printf("(init_dir - new_dir) %% 4 = %d\n", (init_dir - new_dir) % 4);
+// 		return 'x';
+// 	}
+
+// 	// return (init_dir - new_dir) % 4 == 3 ? 'r' : 'l';
+// }
+
+char drive_direction(int prev_dir, coord now, coord to) {
+	int new_dir = compass_direction(now, to);
+
 	/* 	's': straight
 		'b': back
 		'r': right
 		'l': left */
 
-	int init_dir = compass_direction(past, now), new_dir = compass_direction(now, to);
-	
-	if (init_dir == new_dir)
+	if (prev_dir == new_dir)
 		return 's';
-	else if (init_dir % 2 == new_dir % 2)
+	else if (prev_dir % 2 == new_dir % 2)
 		return 'b';
-	else if ((init_dir - new_dir) % 4 == 3 || (init_dir - new_dir) % 4 == -1) return 'r';
-	else if ((init_dir - new_dir) % 4 == 1 || (init_dir - new_dir) % 4 == -3) return 'l';
+	else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
+	else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
 	else {
-		if (verbose) printf("init: %d, new: %d\n", init_dir, new_dir);
-		if (verbose) printf("(init_dir - new_dir) %% 4 = %d\n", (init_dir - new_dir) % 4);
+		if (verbose) printf("prev: %d, new: %d\n", prev_dir, new_dir);
+		if (verbose) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
 		return 'x';
 	}
-
-	// return (init_dir - new_dir) % 4 == 3 ? 'r' : 'l';
 }
 
 int compass_direction(coord from, coord to) {
@@ -418,26 +445,29 @@ int compass_direction(coord from, coord to) {
 	return -1;
 }
 
-char *compass_int(int comp) {
+char compass_int(int comp) {
 	switch(comp) {
 		case 0:
-		return "N";
+		return 'N';
 
 		case 1:
-		return "E";
+		return 'E';
 
 		case 2:
-		return "S";
+		return 'S';
 
 		case 3:
-		return "W";
+		return 'W';
 
 		default:
-		return "!";
+		return '!';
 	}
 }
 
-
-
-
-
+int cp_direction(int cp) {
+	if (cp < 4) return 0;
+	else if (cp < 7) return 3;
+	else if (cp < 10) return 2;
+	else if (cp < 13) return 1;
+	return -1;
+}

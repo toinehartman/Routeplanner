@@ -18,7 +18,7 @@ void find_neighbours(coord n);
 coord checkpoint_to_coord(int checkpoint);
 int node_to_checkpoint(node n);
 void clear_marks();
-void get_route(coord from, coord to);
+void get_route(coord from, coord to, int init_dir);
 void route_marks(coord from, coord to);
 void print_route_marks();
 int route_len(coord a, coord b);
@@ -26,8 +26,9 @@ void short_sort(int *check, int num);
 void route_sequence(int *checks, int checks_num);
 int read_mines();
 void save_mine(coord a, coord b);
-char drive_direction(coord past, coord now, coord to);
+char drive_direction(int prev_dir, coord now, coord to);
 int compass_direction(coord from, coord to);
-char *compass_int(int comp);
+char compass_int(int comp);
+int cp_direction(int cp);
 
 #endif /* FUNCTIONS_H */
