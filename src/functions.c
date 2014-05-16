@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <stdbool.h>
 
 #include "main.h"
 #include "data.h"
@@ -12,27 +11,10 @@ node field[XDIM][YDIM]; /* initialize the field */
 char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "14", "03", "02", "01" }; /* item i in this array is */
 char mine_file[] = "./mines.txt";
 
-static const int roadValue = 1;		/* time-value of driving the length of a road */
-static const int cornerValue = 2;	/* time value of making a 90-degree turn */
 static coord current;
 static coord route[40];
 static int z = 0, curr_route_len;
 
-/*
-Straight means: drive until next real joint.
-Backwwards means: turn around until line is seen second time and drive to next real joint.
-Other directions mean: turn to that side until line found and drive to next real joint.
-*/
-
-/* returns coord struct from given coordinates */
-coord return_coord(int x, int y) {
-	coord c;
-	c.x = x;
-	c.y = y;
-	return c;
-}
-
-/* initializes all nodes */
 void init_field() {
 	int x, y;
 
@@ -60,7 +42,6 @@ void init_field() {
 	current = field[1][0].coords;
 }
 
-/* links node structures to their neighbours (if neighbours exist */
 void link_nodes() {
 	int i, j;
 
@@ -94,15 +75,13 @@ void link_nodes() {
 	}
 }
 
-/* prints all nodes and their coords */
 void print_field() {
 	int i, j;
 
-	/* iterate over all coords from top to bottom, left to right */
 	for (j = YDIM - 1; j >= 0; j--) {
 		for (i = 0; i < XDIM; i++) {
 
-			/* check is node is connected to checkpoint, other value than zero means it is */
+			/* check is node is connected to checkpoint, other value than -1 means it is */
 			if (node_to_checkpoint(field[i][j]) != -1)
 				printf("%3d:(%d, %d)", node_to_checkpoint(field[i][j]), field[i][j].coords.x, field[i][j].coords.y);
 			/* if no checkpoint present, just print coords */
@@ -115,7 +94,6 @@ void print_field() {
 	printf("\n");
 }
 
-/* print all the neighbours of a specific node, function not necessarn.y but used for testing */
 void find_neighbours(coord n) {
 	printf("N:\t%s {%d}\n", field[n.x][n.y].name, field[n.x][n.y].checkpoint);
 
@@ -144,10 +122,13 @@ void find_neighbours(coord n) {
 	else printf("L:\t%s\n", field[n.x][n.y].left->name);
 }
 
-/* 'convert' checkpoint number to int array with coords */
 coord checkpoint_to_coord(int checkpoint) {
 	char name[] = "00";
 	coord coords;
+
+    if (checkpoint > 12 && checkpoint < 1)
+        return (coord){-1, -1};
+
 	strcpy(name, checkpoints[checkpoint]);
 
 	/* string/char to int */
@@ -157,7 +138,6 @@ coord checkpoint_to_coord(int checkpoint) {
 	return coords;
 }
 
-/* convert node to checkpoint */
 int node_to_checkpoint(node n) {
 	int i, a, b;
 	for (i = 1; i <= 12; i++) {
@@ -169,7 +149,6 @@ int node_to_checkpoint(node n) {
 	return -1;
 }
 
-/* reset all Lee's marks to zero and mark all nodes as not visited */
 void clear_marks() {
 	int x, y;
 
@@ -180,7 +159,6 @@ void clear_marks() {
 		}
 }
 
-/* find the shortest route from coord 'from' to coord 'to' */
 void find_shortest_route(coord from, coord to) {
 	int start_cp, end_cp, j, min_mark = 0, changed_neighbours = 0;
 	coord min_coords;
@@ -195,12 +173,11 @@ void find_shortest_route(coord from, coord to) {
 	end_cp = node_to_checkpoint(field[to.x][to.y]);
 
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
-	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
+	printf("End\t\t%d: (%d, %d)\n", end_cp, to.x, to.y);
 	printf("Length of shortest route: %d\n\n", curr_route_len);
 
 	for (j = 0; j < curr_route_len; j++) {
-		route[j].x = -1;
-		route[j].y = -1;
+		route[j] = (coord){-1, -1};
 	}
 	
 	while (current.x != from.x || current.y != from.y) {
@@ -231,7 +208,7 @@ void find_shortest_route(coord from, coord to) {
 
 void iterate_route(int init_dir, coord to) {
 	int j;
-	int first = -1, prev, curr, prev_dir;
+	int first = -1, prev_dir;
 	int end_cp;
 
 	char answer[3];
@@ -267,13 +244,20 @@ void iterate_route(int init_dir, coord to) {
 
 		if (!strcmp(answer, "y\n")) {
 			printf("MINE!!!\n");
-			save_mine(route[j], route[j - 1], true);
-			printf("Mine saved, calculating new route...\n");
+            printf("[O]\n\n");
+			save_mine_to_file(route[j], route[j - 1]);
+            add_mine_to_field(route[j], route[j - 1]);
+			printf("\nMine saved, calculating new route...\n\n");
+            read_mines();
+
 			find_shortest_route(route[j], to);
 			iterate_route((init_dir + 2) % 4, to);
 			return;
 		}
-		else if (!strcmp(answer, "n\n")) printf("NO MINE!!!\n");
+		else if (!strcmp(answer, "n\n")) {
+            printf("NO MINE!!!\n");
+            printf("[V]\n\n");
+        }
 		else fprintf(stderr, "answer:\n%s\n\n", answer);
 
 	}
@@ -283,7 +267,6 @@ void iterate_route(int init_dir, coord to) {
 	printf("(%d, %d) -> (%d)  [%c]\n", route[j].x, route[j].y, end_cp, drive_to_cp_direction(prev_dir, (cp_direction(end_cp) + 2) % 4));
 }
 
-/* mark all points according to Lee */
 void route_marks(coord from, coord to) {
 	int finished, i, x, y;
 
@@ -314,7 +297,6 @@ void route_marks(coord from, coord to) {
 	}
 }
 
-/* print all of Lee's marks */
 void print_route_marks() {
 	int x, y;
 	
@@ -334,7 +316,6 @@ int route_len(coord a, coord b) {
 	return field[b.x][b.y].mark - field[a.x][a.y].mark;
 }
 
-/* sort all destinations checkpoints for shortest total distance */
 void short_sort(int *check, int num) {
 	int i, j, k, tmp;
 
@@ -394,7 +375,7 @@ int read_mines() {
 			}
 			else if (c == '\n') {
 				if (VERBOSE) printf("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
-				save_mine(a, b, 0);
+                add_mine_to_field(a, b);
 				i = 0;
 			}
 		}
@@ -404,15 +385,15 @@ int read_mines() {
 	return 0;
 }
 
-void save_mine(coord a, coord b, bool to_file) {
-	if (to_file) {
-		FILE *mine_f;
-		mine_f = fopen(mine_file, "a");
+void save_mine_to_file(coord a, coord b) {
+    FILE *mine_f;
+    mine_f = fopen(mine_file, "a");
 
-		fprintf(mine_f, "%d%d %d%d\n", a.x, a.y, b.x, b.y);
-		fclose(mine_f);
-	}
-	
+    fprintf(mine_f, "%d%d %d%d\n", a.x, a.y, b.x, b.y);
+    fclose(mine_f);
+}
+
+void add_mine_to_field(coord a, coord b) {
 	if (a.x == b.x) {
 		if (a.y < b.y) {
 			field[a.x][a.y].up = NULL;
@@ -438,23 +419,6 @@ void save_mine(coord a, coord b, bool to_file) {
 char drive_direction(int prev_dir, coord now, coord to) {
 	int new_dir = compass_direction(now, to);
 	return drive_to_cp_direction(prev_dir, new_dir);
-
-	/* 	's': straight
-		'b': back
-		'r': right
-		'l': left */
-
-	// if (prev_dir == new_dir)
-	// 	return 's';
-	// else if (prev_dir % 2 == new_dir % 2)
-	// 	return 'b';
-	// else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
-	// else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
-	// else {
-	// 	if (VERBOSE) printf("prev: %d, new: %d\n", prev_dir, new_dir);
-	// 	if (VERBOSE) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
-	// 	return 'x';
-	// }
 }
 
 char drive_to_cp_direction(int prev_dir, int new_dir) {
@@ -464,15 +428,15 @@ char drive_to_cp_direction(int prev_dir, int new_dir) {
 		'l': left */
 
 	if (prev_dir == new_dir)
-		return 's';
+		return 'V';
 	else if (prev_dir % 2 == new_dir % 2)
-		return 'b';
-	else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
-	else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
+		return 'O';
+	else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'R';
+	else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'L';
 	else {
 		if (VERBOSE) printf("prev: %d, new: %d\n", prev_dir, new_dir);
 		if (VERBOSE) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
-		return 'x';
+		return 'X';
 	}
 }
 
