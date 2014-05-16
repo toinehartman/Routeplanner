@@ -15,7 +15,17 @@ extern node field[XDIM][YDIM];
 coord return_coord(int x, int y);
 void init_field();
 void link_nodes();
+
+/**
+ * Print the field.
+ */
 void print_field();
+
+/**
+ * Find the neighbours....
+ *
+ * @param n Coordinate to find neighbours of.
+ */
 void find_neighbours(coord n);
 coord checkpoint_to_coord(int checkpoint);
 int node_to_checkpoint(node n);
