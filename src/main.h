@@ -5,15 +5,15 @@
 #include "functions.h"
 
 #define START_CP	1
+
 #ifdef DEBUG
-	#define printfv printf
+# define VERBOSE 1
 #else
-	#define printfv
+# define VERBOSE 0
 #endif
 
 extern int cp_num;
 extern int cp;
-extern int verbose;
 
 int main(int argc, char* argv[]);
 

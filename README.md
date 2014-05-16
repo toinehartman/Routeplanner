@@ -1,6 +1,6 @@
 Routeplanner
 ============
-This is a route planner, whick gives the shortest route between two points on an 5 by 5 grid.
+This is a routeplanner, whick gives the shortest route between two points on an 5 by 5 grid.
 ## Synopsis
 
 This routeplanner find a route between a starting checkpoint on the edge of a **5 by 5 grid** and one or more endpoints. It can go by the checkpoints in a given order or via the shortest route that visits them all.
@@ -8,7 +8,7 @@ This routeplanner find a route between a starting checkpoint on the edge of a **
 
 ## Code Example
 ```
-➜  Routeplanner Toine git:(master) ./bin/routeplanner.out 1 5
+➜ ./bin/routeplanner.out 1 5
 
     (0, 4)   9:(1, 4)   8:(2, 4)   7:(3, 4)     (4, 4)
  10:(0, 3)     (1, 3)     (2, 3)     (3, 3)   6:(4, 3)

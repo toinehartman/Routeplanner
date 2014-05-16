@@ -30,6 +30,10 @@ Icon
 *.depend
 *.layout
 
+# XCode project files
+DerivedData/
+**/xcuserdata/
+
 # Misc
 *.tgz
 *.sh

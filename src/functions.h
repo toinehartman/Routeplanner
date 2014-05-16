@@ -1,6 +1,8 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <stdbool.h>
+
 #include "main.h"
 #include "data.h"
 
@@ -18,15 +20,17 @@ void find_neighbours(coord n);
 coord checkpoint_to_coord(int checkpoint);
 int node_to_checkpoint(node n);
 void clear_marks();
-void get_route(coord from, coord to, int init_dir);
+void find_shortest_route(coord from, coord to);
+void iterate_route(int init_dir, coord to);
 void route_marks(coord from, coord to);
 void print_route_marks();
 int route_len(coord a, coord b);
 void short_sort(int *check, int num);
 void route_sequence(int *checks, int checks_num);
 int read_mines();
-void save_mine(coord a, coord b);
+void save_mine(coord a, coord b, bool to_file);
 char drive_direction(int prev_dir, coord now, coord to);
+char drive_to_cp_direction(int prev_dir, int new_dir);
 int compass_direction(coord from, coord to);
 char compass_int(int comp);
 int cp_direction(int cp);

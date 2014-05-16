@@ -20,7 +20,7 @@ INCLUDES	:= $(wildcard $(SRCDIR)/*.h)
 OBJECTS 	:= $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
 
-default: run
+default: $(BINDIR)/$(TARGET)
 
 # link all .o files together
 $(BINDIR)/$(TARGET): $(OBJECTS)
@@ -34,7 +34,7 @@ $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
 	$(CC) -c $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
 
 debug:
-	CFLAGS="-DDEBUG" make
+	@make clean && CFLAGS="-DDEBUG" make
 
 # remove object and dependency files
 clean:
@@ -46,7 +46,7 @@ run: $(BINDIR)/$(TARGET)
 
 # create archive with source code
 release:
-	tar -czvf routeplanner.tgz --exclude=*.tgz --exclude=bin --exclude=obj --exclude=.* *
+	tar -czvf routeplanner.tgz --exclude=*.tgz --exclude=*.sh --exclude=bin --exclude=obj --exclude=.* *
 
 # install binary to /usr/local/bin
 install: $(BINDIR)/$(TARGET)

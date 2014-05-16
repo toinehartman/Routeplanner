@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include <stdbool.h>
 
 #include "main.h"
 #include "data.h"
@@ -14,6 +15,8 @@ char mine_file[] = "./mines.txt";
 static const int roadValue = 1;		/* time-value of driving the length of a road */
 static const int cornerValue = 2;	/* time value of making a 90-degree turn */
 static coord current;
+static coord route[40];
+static int z = 0, curr_route_len;
 
 /*
 Straight means: drive until next real joint.
@@ -41,7 +44,7 @@ void init_field() {
 			snprintf(field[x][y].name, 3, "%d%d", x, y);
 
 			/* set coords */
-			field[x][y].coords = return_coord(x, y);
+			field[x][y].coords = (coord){x ,y};
 
 			/* assign checkpoint numbers */
 			field[x][y].checkpoint = node_to_checkpoint(field[x][y]);
@@ -65,20 +68,28 @@ void link_nodes() {
 		for (i = 0; i < XDIM; i++) {
 
 			/* if node is not in upper row */
-			if (j <= 3) field[i][j].up = &field[i][j + 1];
-			else field[i][j].up = NULL;
-
+			if (j <= 3)
+                field[i][j].up = &field[i][j + 1];
+			else
+                field[i][j].up = NULL;
+            
 			/* if node is not in lower row */
-			if (j >= 1) field[i][j].down = &field[i][j - 1];
-			else field[i][j].down = NULL;
-
+			if (j >= 1)
+                field[i][j].down = &field[i][j - 1];
+			else
+                field[i][j].down = NULL;
+            
 			/* if node is not in rightmost column */
-			if (i <= 3) field[i][j].right = &field[i + 1][j];
-			else field[i][j].right = NULL;
-
+			if (i <= 3)
+                field[i][j].right = &field[i + 1][j];
+			else
+                field[i][j].right = NULL;
+            
 			/* if node is not in leftmost column */
-			if (i >= 1) field[i][j].left = &field[i - 1][j];
-			else field[i][j].left = NULL;
+			if (i >= 1)
+                field[i][j].left = &field[i - 1][j];
+			else
+                field[i][j].left = NULL;
 		}
 	}
 }
@@ -170,26 +181,24 @@ void clear_marks() {
 }
 
 /* find the shortest route from coord 'from' to coord 'to' */
-void get_route(coord from, coord to, int init_dir) {
-	int start_cp, end_cp, j, min_mark = 0, z = 0, len, prev_dir;
-	int first = -1, prev, curr;
-
+void find_shortest_route(coord from, coord to) {
+	int start_cp, end_cp, j, min_mark = 0, changed_neighbours = 0;
 	coord min_coords;
-	coord route[40];
+
+	current = to;
+	z = 0;
 
 	route_marks(from, to);
-	len = route_len(from, to);
+	curr_route_len = route_len(from, to);
 
 	start_cp = node_to_checkpoint(field[from.x][from.y]);
 	end_cp = node_to_checkpoint(field[to.x][to.y]);
 
 	printf("Start\t%d: (%d, %d)\n", start_cp, from.x, from.y);
 	printf("End\t%d: (%d, %d)\n", end_cp, to.x, to.y);
-	printf("Length of shortest route: %d\n\n", len);
+	printf("Length of shortest route: %d\n\n", curr_route_len);
 
-	current = to;
-
-	for (j = 0; j < len; j++) {
+	for (j = 0; j < curr_route_len; j++) {
 		route[j].x = -1;
 		route[j].y = -1;
 	}
@@ -204,40 +213,74 @@ void get_route(coord from, coord to, int init_dir) {
 								field[current.x][current.y].left
 							};
 
-		for (j = 0; j <= 3; j++)
-			if (neighbours[j] && (!min_mark || neighbours[j]->mark < min_mark)) {
+		for (j = 0; j <= 3; j++) {
+            if (neighbours[j] && (!min_mark || neighbours[j]->mark < min_mark)) {
 				min_mark = neighbours[j]->mark;
 				min_coords = neighbours[j]->coords;
+                
+                ++changed_neighbours;
 			}
+        }
+        if (changed_neighbours == 0 || (z > 1 && current.x == to.x && current.y == to.y)) {
+            printf("Can't find route.\n");
+            exit(1);
+        }
 		current = min_coords;
 	}
+}
+
+void iterate_route(int init_dir, coord to) {
+	int j;
+	int first = -1, prev, curr, prev_dir;
+	int end_cp;
+
+	char answer[3];
 
 	route[z] = current;
 
-	for (j = len; j > 0; j--) {
-		if (route[j].x != -1) {
+	for (j = curr_route_len; j > 0; j--) {
+		if (route[j].x != -1 && route[j].y != -1) {
 			if (first == -1) first = j;
 	
 			if (j == first) {
-				printfv("init_dir: %d\n", init_dir);
 				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(init_dir, route[j], route[j - 1]));
-				printfv("(j: %d)(len - j: %d)[curr: %c]", j, len - j, compass_int(init_dir));
+				if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]", j, compass_int(init_dir), compass_int(compass_direction(route[j], route[j - 1])));
 				printf("\n");
 			}
-			else if (j <= len - 1) {
+			else if (j <= curr_route_len - 1) {
 				prev_dir = compass_direction(route[j + 1], route[j]);
 				printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, drive_direction(prev_dir, route[j], route[j - 1]));
-				printfv("(j: %d)(len - j: %d)[prev: %c][curr: %c]", j, len - j, compass_int(compass_direction(route[j + 2], route[j + 1])), compass_int(compass_direction(route[j + 1], route[j])));
+				if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]", j, compass_int(prev_dir), compass_int(compass_direction(route[j], route[j - 1])));
 				printf("\n");
 			}
 			else { /* vreemd, kan eigenlijk niet gebeuren */
-				printf("ERROR in route-array!");
-				printfv("(j: %d)(len - j: %d)", j, len - j);
-				printf("\n");
+				fputs("[ERROR] in route-array!", stderr);
+				fprintf(stderr, "(j: %d)", j);
+				fputs("\n", stderr);
+				exit(EXIT_FAILURE);
 			}
 		}
+		else fprintf(stderr, "[ERROR] route[%d].x = %d, route[%d].y = %d\n", j, route[j].x, j , route[j].y);
+
+		printf("MINE? (y/n): ");
+		fgets(answer, 3, stdin);
+
+		if (!strcmp(answer, "y\n")) {
+			printf("MINE!!!\n");
+			save_mine(route[j], route[j - 1], true);
+			printf("Mine saved, calculating new route...\n");
+			find_shortest_route(route[j], to);
+			iterate_route((init_dir + 2) % 4, to);
+			return;
+		}
+		else if (!strcmp(answer, "n\n")) printf("NO MINE!!!\n");
+		else fprintf(stderr, "answer:\n%s\n\n", answer);
+
 	}
 
+	prev_dir = compass_direction(route[j + 1], route[j]);
+	end_cp = node_to_checkpoint(field[route[j].x][route[j].y]);
+	printf("(%d, %d) -> (%d)  [%c]\n", route[j].x, route[j].y, end_cp, drive_to_cp_direction(prev_dir, (cp_direction(end_cp) + 2) % 4));
 }
 
 /* mark all points according to Lee */
@@ -309,7 +352,9 @@ void route_sequence(int *checks, int checks_num) {
 	int i;
 
 	for (i = 0; i < checks_num - 1; i++) {
-		get_route(checkpoint_to_coord(checks[i]), checkpoint_to_coord(checks[i + 1]), cp_direction(checks[i]));
+		coord to = checkpoint_to_coord(checks[i + 1]);
+		find_shortest_route(checkpoint_to_coord(checks[i]), to);
+		iterate_route(cp_direction(checks[i]), checkpoint_to_coord(checks[i + 1]));
 		if (i < checks_num - 2) printf("\n\n");
 	}
 }
@@ -322,11 +367,11 @@ int read_mines() {
 	coord a, b;
 
 	if (mine_f == NULL) {
-		printfv("Mine file not found!\nContinuing without mines...\n");
+		if (VERBOSE) printf("Mine file not found!\nContinuing without mines...\n");
 		return 1;
 	}
 	else {
-		printfv("MINES:\n----------------\n");
+		if (VERBOSE) printf("MINES:\n----------------\n");
 		while ((c = fgetc(mine_f)) != EOF) {
 			i++;
 			if (c != ' ' && c != '\n') {
@@ -348,18 +393,26 @@ int read_mines() {
 				}
 			}
 			else if (c == '\n') {
-				printfv("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
-				save_mine(a, b);
+				if (VERBOSE) printf("(%d, %d) -- (%d, %d)\n", a.x, a.y, b.x, b.y);
+				save_mine(a, b, 0);
 				i = 0;
 			}
 		}
-		printfv("----------------\n\n");
+		if (VERBOSE) printf("----------------\n\n");
 	}
 	fclose(mine_f);
 	return 0;
 }
 
-void save_mine(coord a, coord b) {
+void save_mine(coord a, coord b, bool to_file) {
+	if (to_file) {
+		FILE *mine_f;
+		mine_f = fopen(mine_file, "a");
+
+		fprintf(mine_f, "%d%d %d%d\n", a.x, a.y, b.x, b.y);
+		fclose(mine_f);
+	}
+	
 	if (a.x == b.x) {
 		if (a.y < b.y) {
 			field[a.x][a.y].up = NULL;
@@ -384,7 +437,27 @@ void save_mine(coord a, coord b) {
 
 char drive_direction(int prev_dir, coord now, coord to) {
 	int new_dir = compass_direction(now, to);
+	return drive_to_cp_direction(prev_dir, new_dir);
 
+	/* 	's': straight
+		'b': back
+		'r': right
+		'l': left */
+
+	// if (prev_dir == new_dir)
+	// 	return 's';
+	// else if (prev_dir % 2 == new_dir % 2)
+	// 	return 'b';
+	// else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
+	// else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
+	// else {
+	// 	if (VERBOSE) printf("prev: %d, new: %d\n", prev_dir, new_dir);
+	// 	if (VERBOSE) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
+	// 	return 'x';
+	// }
+}
+
+char drive_to_cp_direction(int prev_dir, int new_dir) {
 	/* 	's': straight
 		'b': back
 		'r': right
@@ -397,8 +470,8 @@ char drive_direction(int prev_dir, coord now, coord to) {
 	else if ((prev_dir - new_dir) % 4 == 3 || (prev_dir - new_dir) % 4 == -1) return 'r';
 	else if ((prev_dir - new_dir) % 4 == 1 || (prev_dir - new_dir) % 4 == -3) return 'l';
 	else {
-		printfv("prev: %d, new: %d\n", prev_dir, new_dir);
-		printfv("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
+		if (VERBOSE) printf("prev: %d, new: %d\n", prev_dir, new_dir);
+		if (VERBOSE) printf("(prev_dir - new_dir) %% 4 = %d\n", (prev_dir - new_dir) % 4);
 		return 'x';
 	}
 }

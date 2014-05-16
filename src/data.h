@@ -15,9 +15,9 @@ typedef struct Node {
 	int mark;
 	int past;			/* 0 means no action necessary, 1 means vertically approached, 2 means horizontally */
 	struct Node *up;
+	struct Node *down;
 	struct Node *right;
 	struct Node *left;
-	struct Node *down;
 } node;
 
 #endif /* DATA_H */

@@ -10,8 +10,6 @@
 #include "data.h"
 #include "functions.h"
 
-int verbose = 0;
-
 int main(int argc, char* argv[]) {
 	int i, j, *cp, *new_cp, cp_num, a;
 	
@@ -71,7 +69,7 @@ int main(int argc, char* argv[]) {
 	for (j = 0; j < cp_num; j++) printf("%d ", cp[j]);
 	printf("\n-------\n\n");
 
-	if (read_mines(1) == 1) printf("No mine file!\n");
+	if (read_mines() == 1) printf("No mine file!\n");
 
 	route_sequence(cp, cp_num);
 
