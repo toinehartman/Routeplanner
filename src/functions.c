@@ -416,9 +416,9 @@ void add_mine_to_field(coord a, coord b) {
 	}
 }
 
-char drive_direction(int prev_dir, coord now, coord to) {
+char drive_direction(int init_dir, coord now, coord to) {
 	int new_dir = compass_direction(now, to);
-	return drive_to_cp_direction(prev_dir, new_dir);
+	return drive_to_cp_direction(init_dir, new_dir);
 }
 
 char drive_to_cp_direction(int prev_dir, int new_dir) {

@@ -23,6 +23,7 @@ void print_field();
  * Find the neighbours....
  *
  * @param n Coordinate to find neighbours of.
+ * @deprecated
  */
 void find_neighbours(coord n);
 
@@ -44,6 +45,7 @@ int node_to_checkpoint(node n);
 
 /**
  * Clear all the marks used in Lee algorithm; clearing means setting to zero.
+ * @see route_marks()
  */
 void clear_marks();
 
@@ -69,6 +71,7 @@ void iterate_route(int init_dir, coord to);
  * 
  * @param from The starting point of the route.
  * @param to The destination of the route.
+ * @see find_shortest_route()
  */
 void route_marks(coord from, coord to);
 
@@ -85,15 +88,90 @@ void print_route_marks();
  * @return The length of the route.
  */
 int route_len(coord a, coord b);
+
+/**
+ * Sort all destination checkpoints for the shortest order i.e. shortest total route length.
+ *
+ * @param check Array of numbers of all destination checkpoints in random order.
+ * @param num Number of destination checkpoints i.e. length of the int array 'check'.
+ */
 void short_sort(int *check, int num);
+
+/**
+ * Find the route from checkpoint i to checkpoint (i + 1) in the checkpoint array, in the given order. Go to all given checkpoints this way.
+ *
+ * @param checks Array of destination checkpoints in order.
+ * @param check_num Number of checkpoints i.e. the length of the 'checks' array.
+ */
 void route_sequence(int *checks, int checks_num);
+
+/**
+ * Reads mines from the mines file and calls add_mine_to_field().
+ *
+ * @return 0 if successfull, 1 if mines file not found.
+ * @see add_mine_to_field()
+ */
 int read_mines();
+
+/**
+ * Saves a found mine to the mines file.
+ * 
+ * @param a, b Coords between which the mine is present.
+ */
 void save_mine_to_file(coord a, coord b);
+
+/**
+ * Add a mine to the field i.e. disconnect nodes between
+ * which the mine is present.
+ * 
+ * @param a, b Coord between which the mine is present.
+ */
 void add_mine_to_field(coord a, coord b);
-char drive_direction(int prev_dir, coord now, coord to);
+
+/**
+ * Give a drive (relative) direction (right, forward etc.).
+ *
+ * @param init_dir Initial compass direction before driving in the direction this fucntion will return.
+ * @param now Current location's coordinate.
+ * @param to Coordinate of the next node to go to.
+ * @return Direction to drive to.
+ * @see drive_to_cp_direction()
+ */
+char drive_direction(int init_dir, coord now, coord to);
+
+/**
+ * Give a drive (relative) direction (right, forward etc.).
+ *
+ * @param prev_dir Initial  compass direction.
+ * @param new_dir Future compass direction.
+ * @return Direction to drive to.
+ * @see compass_direction()
+ */
 char drive_to_cp_direction(int prev_dir, int new_dir);
+
+/**
+ * Gives the compass direction (north, west etc.) from one coord to another.
+ *
+ * @param from Starting coordinate.
+ * @param to Destination coordinate.
+ * @return int of the compass direction N = 0, E = 1, etc.).
+ */
 int compass_direction(coord from, coord to);
+
+/**
+ * Convert the int of a compass direction to an understandable char.
+ *
+ * @param comp The number of the direction.
+ * @return The first character of the name of the direction.
+ */
 char compass_int(int comp);
+
+/**
+ * Gives the compass direction number in which a certain checkpoint is left.
+ *
+ * @param cp The specific checkpoint.
+ * @return The compass direction when leaving this checkpoint.
+ */
 int cp_direction(int cp);
 
 #endif /* FUNCTIONS_H */
