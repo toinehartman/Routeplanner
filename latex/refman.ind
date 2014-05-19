@@ -1,0 +1,63 @@
+\begin{theindex}
+
+  \item {checkpoint}
+    \subitem {Node}, \hyperpage{6}
+  \item {coord}, \hyperpage{5}
+    \subitem {x}, \hyperpage{5}
+    \subitem {y}, \hyperpage{5}
+  \item {coords}
+    \subitem {Node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {east}
+    \subitem {Node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {mark}
+    \subitem {Node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {name}
+    \subitem {Node}, \hyperpage{6}
+  \item {Node}, \hyperpage{5}
+    \subitem {checkpoint}, \hyperpage{6}
+    \subitem {coords}, \hyperpage{6}
+    \subitem {east}, \hyperpage{6}
+    \subitem {mark}, \hyperpage{6}
+    \subitem {name}, \hyperpage{6}
+    \subitem {north}, \hyperpage{6}
+    \subitem {past}, \hyperpage{6}
+    \subitem {south}, \hyperpage{7}
+    \subitem {west}, \hyperpage{7}
+  \item {north}
+    \subitem {Node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {past}
+    \subitem {Node}, \hyperpage{6}
+
+  \indexspace
+
+  \item {south}
+    \subitem {Node}, \hyperpage{7}
+
+  \indexspace
+
+  \item {west}
+    \subitem {Node}, \hyperpage{7}
+
+  \indexspace
+
+  \item {x}
+    \subitem {coord}, \hyperpage{5}
+
+  \indexspace
+
+  \item {y}
+    \subitem {coord}, \hyperpage{5}
+
+\end{theindex}

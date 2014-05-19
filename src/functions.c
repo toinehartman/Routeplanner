@@ -1,3 +1,7 @@
+/**
+ @file functions.c The functions file.
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -18,7 +22,6 @@ static int z = 0, curr_route_len;
 void init_field() {
 	int x, y;
 
-	/* iterate over all possible x and y coordinates */
 	for (y = 0; y < YDIM; y++) {
 		for (x = 0; x < XDIM; x++) {
 
@@ -32,10 +35,10 @@ void init_field() {
 			field[x][y].checkpoint = node_to_checkpoint(field[x][y]);
 
 			/* init neighbours */
-			field[x][y].up = NULL;
-			field[x][y].down = NULL;
-			field[x][y].left = NULL;
-			field[x][y].right = NULL;
+			field[x][y].north = NULL;
+			field[x][y].south = NULL;
+			field[x][y].west = NULL;
+			field[x][y].east = NULL;
 		}
 	}
 
@@ -50,27 +53,27 @@ void link_nodes() {
 
 			/* if node is not in upper row */
 			if (j <= 3)
-                field[i][j].up = &field[i][j + 1];
+                field[i][j].north = &field[i][j + 1];
 			else
-                field[i][j].up = NULL;
+                field[i][j].north = NULL;
             
 			/* if node is not in lower row */
 			if (j >= 1)
-                field[i][j].down = &field[i][j - 1];
+                field[i][j].south = &field[i][j - 1];
 			else
-                field[i][j].down = NULL;
+                field[i][j].south = NULL;
             
 			/* if node is not in rightmost column */
 			if (i <= 3)
-                field[i][j].right = &field[i + 1][j];
+                field[i][j].east = &field[i + 1][j];
 			else
-                field[i][j].right = NULL;
+                field[i][j].east = NULL;
             
 			/* if node is not in leftmost column */
 			if (i >= 1)
-                field[i][j].left = &field[i - 1][j];
+                field[i][j].west = &field[i - 1][j];
 			else
-                field[i][j].left = NULL;
+                field[i][j].west = NULL;
 		}
 	}
 }
@@ -97,29 +100,29 @@ void print_field() {
 void find_neighbours(coord n) {
 	printf("N:\t%s {%d}\n", field[n.x][n.y].name, field[n.x][n.y].checkpoint);
 
-	if (field[n.x][n.y].up && field[n.x][n.y].up->checkpoint != 0)
-		printf("U:\t%s {%d}\n", field[n.x][n.y].up->name,
-				field[n.x][n.y].up->checkpoint);
-	else if (field[n.x][n.y].up->name == 0) printf("U:\t-\n");
-	else printf("U:\t%s\n", field[n.x][n.y].up->name);
+	if (field[n.x][n.y].north && field[n.x][n.y].north->checkpoint != 0)
+		printf("U:\t%s {%d}\n", field[n.x][n.y].north->name,
+				field[n.x][n.y].north->checkpoint);
+	else if (field[n.x][n.y].north->name == 0) printf("U:\t-\n");
+	else printf("U:\t%s\n", field[n.x][n.y].north->name);
 
-	if (field[n.x][n.y].down && field[n.x][n.y].down->checkpoint != 0)
-		printf("D:\t%s {%d}\n", field[n.x][n.y].down->name,
-				field[n.x][n.y].down->checkpoint);
-	else if (field[n.x][n.y].down->name == 0) printf("D:\t-\n");
-	else printf("D:\t%s\n", field[n.x][n.y].down->name);
+	if (field[n.x][n.y].south && field[n.x][n.y].south->checkpoint != 0)
+		printf("D:\t%s {%d}\n", field[n.x][n.y].south->name,
+				field[n.x][n.y].south->checkpoint);
+	else if (field[n.x][n.y].south->name == 0) printf("D:\t-\n");
+	else printf("D:\t%s\n", field[n.x][n.y].south->name);
 
-	if (field[n.x][n.y].right && field[n.x][n.y].right->checkpoint != 0)
-		printf("R:\t%s {%d}\n", field[n.x][n.y].right->name,
-				field[n.x][n.y].right->checkpoint);
-	else if (field[n.x][n.y].right->name == 0) printf("R:\t-\n");
-	else printf("R:\t%s\n", field[n.x][n.y].right->name);
+	if (field[n.x][n.y].east && field[n.x][n.y].east->checkpoint != 0)
+		printf("R:\t%s {%d}\n", field[n.x][n.y].east->name,
+				field[n.x][n.y].east->checkpoint);
+	else if (field[n.x][n.y].east->name == 0) printf("R:\t-\n");
+	else printf("R:\t%s\n", field[n.x][n.y].east->name);
 
-	if (field[n.x][n.y].left && field[n.x][n.y].left->checkpoint != 0)
-		printf("L:\t%s {%d}\n", field[n.x][n.y].left->name,
-				field[n.x][n.y].left->checkpoint);
-	else if (field[n.x][n.y].left->name == 0) printf("L:\t-\n");
-	else printf("L:\t%s\n", field[n.x][n.y].left->name);
+	if (field[n.x][n.y].west && field[n.x][n.y].west->checkpoint != 0)
+		printf("L:\t%s {%d}\n", field[n.x][n.y].west->name,
+				field[n.x][n.y].west->checkpoint);
+	else if (field[n.x][n.y].west->name == 0) printf("L:\t-\n");
+	else printf("L:\t%s\n", field[n.x][n.y].west->name);
 }
 
 coord checkpoint_to_coord(int checkpoint) {
@@ -184,10 +187,10 @@ void find_shortest_route(coord from, coord to) {
 		route[z] = current;
 		z++;
 
-		node *neighbours[] = {	field[current.x][current.y].up,
-								field[current.x][current.y].down,
-								field[current.x][current.y].right,
-								field[current.x][current.y].left
+		node *neighbours[] = {	field[current.x][current.y].north,
+								field[current.x][current.y].south,
+								field[current.x][current.y].east,
+								field[current.x][current.y].west
 							};
 
 		for (j = 0; j <= 3; j++) {
@@ -283,14 +286,14 @@ void route_marks(coord from, coord to) {
 			for (x = 0; x < XDIM; x++)
 				if (field[x][y].mark == i && !field[x][y].past) {
 					finished = 0;
-					if (field[x][y].up && !field[x][y].up->mark)
-						field[x][y].up->mark = i + 1;
-					if (field[x][y].down && !field[x][y].down->mark)
-						field[x][y].down->mark = i + 1;
-					if (field[x][y].right && !field[x][y].right->mark)
-						field[x][y].right->mark = i + 1;
-					if (field[x][y].left && !field[x][y].left->mark)
-						field[x][y].left->mark = i + 1;
+					if (field[x][y].north && !field[x][y].north->mark)
+						field[x][y].north->mark = i + 1;
+					if (field[x][y].south && !field[x][y].south->mark)
+						field[x][y].south->mark = i + 1;
+					if (field[x][y].east && !field[x][y].east->mark)
+						field[x][y].east->mark = i + 1;
+					if (field[x][y].west && !field[x][y].west->mark)
+						field[x][y].west->mark = i + 1;
 					field[x][y].past = 1;
 				}
 		i++;
@@ -396,22 +399,22 @@ void save_mine_to_file(coord a, coord b) {
 void add_mine_to_field(coord a, coord b) {
 	if (a.x == b.x) {
 		if (a.y < b.y) {
-			field[a.x][a.y].up = NULL;
-			field[b.x][b.y].down = NULL;
+			field[a.x][a.y].north = NULL;
+			field[b.x][b.y].south = NULL;
 		}
 		else if (a.y > b.y) {
-			field[a.x][a.y].down = NULL;
-			field[b.x][b.y].up = NULL;
+			field[a.x][a.y].south = NULL;
+			field[b.x][b.y].north = NULL;
 		}
 	}
 	else if (a.y == b.y) {
 		if (a.x < b.x) {
-			field[a.x][a.y].right = NULL;
-			field[b.x][b.y].left = NULL;
+			field[a.x][a.y].east = NULL;
+			field[b.x][b.y].west = NULL;
 		}
 		else if (a.x > b.x) {
-			field[a.x][a.y].left = NULL;
-			field[b.x][b.y].right = NULL;
+			field[a.x][a.y].west = NULL;
+			field[b.x][b.y].east = NULL;
 		}
 	}
 }

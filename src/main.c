@@ -1,6 +1,6 @@
-/* 	Projectgroep D2
-	Luc, Wesley en Toine
-*/
+/**
+ @file main.c The main file.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>

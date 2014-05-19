@@ -1,3 +1,7 @@
+/**
+ @file functions.h The function header file.
+ */
+
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
@@ -14,8 +18,9 @@ coord return_coord(int x, int y);
 void init_field();
 void link_nodes();
 
-/**
- * Print the field.
+//! Print the field.
+/*!
+ * Print all the checkpoints and nodes of the fields.
  */
 void print_field();
 
@@ -101,7 +106,7 @@ void short_sort(int *check, int num);
  * Find the route from checkpoint i to checkpoint (i + 1) in the checkpoint array, in the given order. Go to all given checkpoints this way.
  *
  * @param checks Array of destination checkpoints in order.
- * @param check_num Number of checkpoints i.e. the length of the 'checks' array.
+ * @param checks_num Number of checkpoints i.e. the length of the 'checks' array.
  */
 void route_sequence(int *checks, int checks_num);
 

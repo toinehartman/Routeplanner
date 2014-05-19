@@ -1,0 +1,560 @@
+\hypertarget{functions_8h}{\section{src/functions.h File Reference}
+\label{functions_8h}\index{src/functions.\+h@{src/functions.\+h}}
+}
+{\ttfamily \#include \char`\"{}main.\+h\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}data.\+h\char`\"{}}\\*
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{functions_8h_a9b5f0dd7de3d5e0b8c92d1fc8a93e9a8}{X\+D\+I\+M}~5		/$\ast$ define x-\/dimension $\ast$/
+\item 
+\#define \hyperlink{functions_8h_a4421248f1ebb5b043a88a19be05a94a9}{Y\+D\+I\+M}~5		/$\ast$ define y-\/dimension $\ast$/
+\item 
+\#define \hyperlink{functions_8h_ac313eec56c5d6fe1e868b594136eaba5}{A\+R\+R\+\_\+\+L\+E\+N}(a)~(sizeof(a) / sizeof(a\mbox{[}0\mbox{]}))		/$\ast$ used to determine the length of arrays $\ast$/
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} \hyperlink{functions_8h_a408ba79aae6e669465a309ff2e40d776}{return\+\_\+coord} (int x, int y)
+\item 
+void \hyperlink{functions_8h_a7f3802b77153d33a824ddde1ce71cf56}{init\+\_\+field} ()
+\item 
+void \hyperlink{functions_8h_add9340b264bd1d681d733d5c0040f17b}{link\+\_\+nodes} ()
+\item 
+void \hyperlink{functions_8h_aa7d859d6aaff63fe1956a3aa11517b68}{print\+\_\+field} ()
+\begin{DoxyCompactList}\small\item\em Print the field. \end{DoxyCompactList}\item 
+void \hyperlink{functions_8h_a9c338a15c7f68cd78f644352676421b1}{find\+\_\+neighbours} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} n)
+\item 
+\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} \hyperlink{functions_8h_a693e42c68acd8d9c2dc10d58fd643127}{checkpoint\+\_\+to\+\_\+coord} (int checkpoint)
+\item 
+int \hyperlink{functions_8h_acf376221f1504defdf0883fff3cdef87}{node\+\_\+to\+\_\+checkpoint} (\hyperlink{data_8h_a682f531e759e6edca2fba6c56a0b6298}{node} n)
+\item 
+void \hyperlink{functions_8h_a37b3ef1792a1aa0e15fa86c065e0b75e}{clear\+\_\+marks} ()
+\item 
+void \hyperlink{functions_8h_a3b53b5977fae818c772c9584cd6ed40c}{find\+\_\+shortest\+\_\+route} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} from, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} to)
+\item 
+void \hyperlink{functions_8h_a8a5c97821f643533d9fb99d1821c2ed2}{iterate\+\_\+route} (int init\+\_\+dir, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} to)
+\item 
+void \hyperlink{functions_8h_a7fe57d21be2d6fd130905ab6e94066a0}{route\+\_\+marks} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} from, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} to)
+\item 
+void \hyperlink{functions_8h_a7bd7bdf732da189e2a01c788fa840936}{print\+\_\+route\+\_\+marks} ()
+\item 
+int \hyperlink{functions_8h_ace8976a31015e5f8c4f4ceb99b4b9a6d}{route\+\_\+len} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} a, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} b)
+\item 
+void \hyperlink{functions_8h_abd647fe75c7c248cd6c158f03ce15f99}{short\+\_\+sort} (int $\ast$check, int num)
+\item 
+void \hyperlink{functions_8h_aaddc4d6edc0a09c19994ca15f7c99b9c}{route\+\_\+sequence} (int $\ast$checks, int checks\+\_\+num)
+\item 
+int \hyperlink{functions_8h_a60ba7f0d6f9ae1ea1362ae2f044bdb2b}{read\+\_\+mines} ()
+\item 
+void \hyperlink{functions_8h_a567b0c657ac07d450120ac81edd010f4}{save\+\_\+mine\+\_\+to\+\_\+file} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} a, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} b)
+\item 
+void \hyperlink{functions_8h_a6921ef449cb61e8e958e802dea870a5d}{add\+\_\+mine\+\_\+to\+\_\+field} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} a, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} b)
+\item 
+char \hyperlink{functions_8h_ae658cbc618129dbfd4ee6fea34767546}{drive\+\_\+direction} (int init\+\_\+dir, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} now, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} to)
+\item 
+char \hyperlink{functions_8h_af531fc2c3ed152003d027c41f94e2d5e}{drive\+\_\+to\+\_\+cp\+\_\+direction} (int prev\+\_\+dir, int new\+\_\+dir)
+\item 
+int \hyperlink{functions_8h_abd552d19cab7596e2bcbe99c8336ce4b}{compass\+\_\+direction} (\hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} from, \hyperlink{data_8h_a0159c7100fad61bcfb2d671d7602a458}{coord} to)
+\item 
+char \hyperlink{functions_8h_ab411e87edc7095da9e288e99ab8df6fc}{compass\+\_\+int} (int comp)
+\item 
+int \hyperlink{functions_8h_a85c5833bda4efa0310196845d3892b5b}{cp\+\_\+direction} (int \hyperlink{main_8h_a8a8d3b640018f82b1a7420c41e820b91}{cp})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{data_8h_a682f531e759e6edca2fba6c56a0b6298}{node} \hyperlink{functions_8h_a332f091601a2d32ca549f6db3cf4a07f}{field} \mbox{[}\hyperlink{functions_8h_a9b5f0dd7de3d5e0b8c92d1fc8a93e9a8}{X\+D\+I\+M}\mbox{]}\mbox{[}\hyperlink{functions_8h_a4421248f1ebb5b043a88a19be05a94a9}{Y\+D\+I\+M}\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The function header file. 
+
+Definition in file \hyperlink{functions_8h_source}{functions.\+h}.
+
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{functions_8h_ac313eec56c5d6fe1e868b594136eaba5}{\index{functions.\+h@{functions.\+h}!A\+R\+R\+\_\+\+L\+E\+N@{A\+R\+R\+\_\+\+L\+E\+N}}
+\index{A\+R\+R\+\_\+\+L\+E\+N@{A\+R\+R\+\_\+\+L\+E\+N}!functions.\+h@{functions.\+h}}
+\subsubsection[{A\+R\+R\+\_\+\+L\+E\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define A\+R\+R\+\_\+\+L\+E\+N(
+\begin{DoxyParamCaption}
+\item[{}]{a}
+\end{DoxyParamCaption}
+)~(sizeof(a) / sizeof(a\mbox{[}0\mbox{]}))		/$\ast$ used to determine the length of arrays $\ast$/}}\label{functions_8h_ac313eec56c5d6fe1e868b594136eaba5}
+
+
+Definition at line 13 of file functions.\+h.
+
+\hypertarget{functions_8h_a9b5f0dd7de3d5e0b8c92d1fc8a93e9a8}{\index{functions.\+h@{functions.\+h}!X\+D\+I\+M@{X\+D\+I\+M}}
+\index{X\+D\+I\+M@{X\+D\+I\+M}!functions.\+h@{functions.\+h}}
+\subsubsection[{X\+D\+I\+M}]{\setlength{\rightskip}{0pt plus 5cm}\#define X\+D\+I\+M~5		/$\ast$ define x-\/dimension $\ast$/}}\label{functions_8h_a9b5f0dd7de3d5e0b8c92d1fc8a93e9a8}
+
+
+Definition at line 11 of file functions.\+h.
+
+\hypertarget{functions_8h_a4421248f1ebb5b043a88a19be05a94a9}{\index{functions.\+h@{functions.\+h}!Y\+D\+I\+M@{Y\+D\+I\+M}}
+\index{Y\+D\+I\+M@{Y\+D\+I\+M}!functions.\+h@{functions.\+h}}
+\subsubsection[{Y\+D\+I\+M}]{\setlength{\rightskip}{0pt plus 5cm}\#define Y\+D\+I\+M~5		/$\ast$ define y-\/dimension $\ast$/}}\label{functions_8h_a4421248f1ebb5b043a88a19be05a94a9}
+
+
+Definition at line 12 of file functions.\+h.
+
+
+
+\subsection{Function Documentation}
+\hypertarget{functions_8h_a6921ef449cb61e8e958e802dea870a5d}{\index{functions.\+h@{functions.\+h}!add\+\_\+mine\+\_\+to\+\_\+field@{add\+\_\+mine\+\_\+to\+\_\+field}}
+\index{add\+\_\+mine\+\_\+to\+\_\+field@{add\+\_\+mine\+\_\+to\+\_\+field}!functions.\+h@{functions.\+h}}
+\subsubsection[{add\+\_\+mine\+\_\+to\+\_\+field}]{\setlength{\rightskip}{0pt plus 5cm}void add\+\_\+mine\+\_\+to\+\_\+field (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{a, }
+\item[{{\bf coord}}]{b}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a6921ef449cb61e8e958e802dea870a5d}
+Add a mine to the field i.\+e. disconnect nodes between which the mine is present.
+
+
+\begin{DoxyParams}{Parameters}
+{\em a,b} & \hyperlink{struct_coord}{Coord} between which the mine is present. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 399 of file functions.\+c.
+
+\hypertarget{functions_8h_a693e42c68acd8d9c2dc10d58fd643127}{\index{functions.\+h@{functions.\+h}!checkpoint\+\_\+to\+\_\+coord@{checkpoint\+\_\+to\+\_\+coord}}
+\index{checkpoint\+\_\+to\+\_\+coord@{checkpoint\+\_\+to\+\_\+coord}!functions.\+h@{functions.\+h}}
+\subsubsection[{checkpoint\+\_\+to\+\_\+coord}]{\setlength{\rightskip}{0pt plus 5cm}{\bf coord} checkpoint\+\_\+to\+\_\+coord (
+\begin{DoxyParamCaption}
+\item[{int}]{checkpoint}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a693e42c68acd8d9c2dc10d58fd643127}
+Find the coordinates of a specific checkpoint.
+
+
+\begin{DoxyParams}{Parameters}
+{\em checkpoint} & Checkpoint to find coordinates of. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The coordinate of the given checkpoint if the checkpoint exists, (coord)\{-\/1, -\/1\} otherwise. 
+\end{DoxyReturn}
+
+
+Definition at line 128 of file functions.\+c.
+
+\hypertarget{functions_8h_a37b3ef1792a1aa0e15fa86c065e0b75e}{\index{functions.\+h@{functions.\+h}!clear\+\_\+marks@{clear\+\_\+marks}}
+\index{clear\+\_\+marks@{clear\+\_\+marks}!functions.\+h@{functions.\+h}}
+\subsubsection[{clear\+\_\+marks}]{\setlength{\rightskip}{0pt plus 5cm}void clear\+\_\+marks (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a37b3ef1792a1aa0e15fa86c065e0b75e}
+Clear all the marks used in Lee algorithm; clearing means setting to zero. \begin{DoxySeeAlso}{See also}
+\hyperlink{functions_8h_a7fe57d21be2d6fd130905ab6e94066a0}{route\+\_\+marks()} 
+\end{DoxySeeAlso}
+
+
+Definition at line 155 of file functions.\+c.
+
+\hypertarget{functions_8h_abd552d19cab7596e2bcbe99c8336ce4b}{\index{functions.\+h@{functions.\+h}!compass\+\_\+direction@{compass\+\_\+direction}}
+\index{compass\+\_\+direction@{compass\+\_\+direction}!functions.\+h@{functions.\+h}}
+\subsubsection[{compass\+\_\+direction}]{\setlength{\rightskip}{0pt plus 5cm}int compass\+\_\+direction (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{from, }
+\item[{{\bf coord}}]{to}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_abd552d19cab7596e2bcbe99c8336ce4b}
+Gives the compass direction (north, west etc.) from one coord to another.
+
+
+\begin{DoxyParams}{Parameters}
+{\em from} & Starting coordinate. \\
+\hline
+{\em to} & Destination coordinate. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+int of the compass direction N = 0, E = 1, etc.). 
+\end{DoxyReturn}
+
+
+Definition at line 446 of file functions.\+c.
+
+\hypertarget{functions_8h_ab411e87edc7095da9e288e99ab8df6fc}{\index{functions.\+h@{functions.\+h}!compass\+\_\+int@{compass\+\_\+int}}
+\index{compass\+\_\+int@{compass\+\_\+int}!functions.\+h@{functions.\+h}}
+\subsubsection[{compass\+\_\+int}]{\setlength{\rightskip}{0pt plus 5cm}char compass\+\_\+int (
+\begin{DoxyParamCaption}
+\item[{int}]{comp}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_ab411e87edc7095da9e288e99ab8df6fc}
+Convert the int of a compass direction to an understandable char.
+
+
+\begin{DoxyParams}{Parameters}
+{\em comp} & The number of the direction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The first character of the name of the direction. 
+\end{DoxyReturn}
+
+
+Definition at line 457 of file functions.\+c.
+
+\hypertarget{functions_8h_a85c5833bda4efa0310196845d3892b5b}{\index{functions.\+h@{functions.\+h}!cp\+\_\+direction@{cp\+\_\+direction}}
+\index{cp\+\_\+direction@{cp\+\_\+direction}!functions.\+h@{functions.\+h}}
+\subsubsection[{cp\+\_\+direction}]{\setlength{\rightskip}{0pt plus 5cm}int cp\+\_\+direction (
+\begin{DoxyParamCaption}
+\item[{int}]{cp}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a85c5833bda4efa0310196845d3892b5b}
+Gives the compass direction number in which a certain checkpoint is left.
+
+
+\begin{DoxyParams}{Parameters}
+{\em cp} & The specific checkpoint. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The compass direction when leaving this checkpoint. 
+\end{DoxyReturn}
+
+
+Definition at line 476 of file functions.\+c.
+
+\hypertarget{functions_8h_ae658cbc618129dbfd4ee6fea34767546}{\index{functions.\+h@{functions.\+h}!drive\+\_\+direction@{drive\+\_\+direction}}
+\index{drive\+\_\+direction@{drive\+\_\+direction}!functions.\+h@{functions.\+h}}
+\subsubsection[{drive\+\_\+direction}]{\setlength{\rightskip}{0pt plus 5cm}char drive\+\_\+direction (
+\begin{DoxyParamCaption}
+\item[{int}]{init\+\_\+dir, }
+\item[{{\bf coord}}]{now, }
+\item[{{\bf coord}}]{to}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_ae658cbc618129dbfd4ee6fea34767546}
+Give a drive (relative) direction (right, forward etc.).
+
+
+\begin{DoxyParams}{Parameters}
+{\em init\+\_\+dir} & Initial compass direction before driving in the direction this fucntion will return. \\
+\hline
+{\em now} & Current location's coordinate. \\
+\hline
+{\em to} & Coordinate of the next node to go to. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Direction to drive to. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{functions_8h_af531fc2c3ed152003d027c41f94e2d5e}{drive\+\_\+to\+\_\+cp\+\_\+direction()} 
+\end{DoxySeeAlso}
+
+
+Definition at line 422 of file functions.\+c.
+
+\hypertarget{functions_8h_af531fc2c3ed152003d027c41f94e2d5e}{\index{functions.\+h@{functions.\+h}!drive\+\_\+to\+\_\+cp\+\_\+direction@{drive\+\_\+to\+\_\+cp\+\_\+direction}}
+\index{drive\+\_\+to\+\_\+cp\+\_\+direction@{drive\+\_\+to\+\_\+cp\+\_\+direction}!functions.\+h@{functions.\+h}}
+\subsubsection[{drive\+\_\+to\+\_\+cp\+\_\+direction}]{\setlength{\rightskip}{0pt plus 5cm}char drive\+\_\+to\+\_\+cp\+\_\+direction (
+\begin{DoxyParamCaption}
+\item[{int}]{prev\+\_\+dir, }
+\item[{int}]{new\+\_\+dir}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_af531fc2c3ed152003d027c41f94e2d5e}
+Give a drive (relative) direction (right, forward etc.).
+
+
+\begin{DoxyParams}{Parameters}
+{\em prev\+\_\+dir} & Initial compass direction. \\
+\hline
+{\em new\+\_\+dir} & Future compass direction. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Direction to drive to. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{functions_8h_abd552d19cab7596e2bcbe99c8336ce4b}{compass\+\_\+direction()} 
+\end{DoxySeeAlso}
+
+
+Definition at line 427 of file functions.\+c.
+
+\hypertarget{functions_8h_a9c338a15c7f68cd78f644352676421b1}{\index{functions.\+h@{functions.\+h}!find\+\_\+neighbours@{find\+\_\+neighbours}}
+\index{find\+\_\+neighbours@{find\+\_\+neighbours}!functions.\+h@{functions.\+h}}
+\subsubsection[{find\+\_\+neighbours}]{\setlength{\rightskip}{0pt plus 5cm}void find\+\_\+neighbours (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{n}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a9c338a15c7f68cd78f644352676421b1}
+Find the neighbours....
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & Coordinate to find neighbours of. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Deprecated}
+\item[\hyperlink{deprecated__deprecated000001}{Deprecated}]\end{DoxyRefDesc}
+
+
+Definition at line 100 of file functions.\+c.
+
+\hypertarget{functions_8h_a3b53b5977fae818c772c9584cd6ed40c}{\index{functions.\+h@{functions.\+h}!find\+\_\+shortest\+\_\+route@{find\+\_\+shortest\+\_\+route}}
+\index{find\+\_\+shortest\+\_\+route@{find\+\_\+shortest\+\_\+route}!functions.\+h@{functions.\+h}}
+\subsubsection[{find\+\_\+shortest\+\_\+route}]{\setlength{\rightskip}{0pt plus 5cm}void find\+\_\+shortest\+\_\+route (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{from, }
+\item[{{\bf coord}}]{to}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a3b53b5977fae818c772c9584cd6ed40c}
+Applies Lee algorithm (\href{http://en.wikipedia.org/wiki/Lee_algorithm}{\tt http\+://en.\+wikipedia.\+org/wiki/\+Lee\+\_\+algorithm}) to find the shortest route between two points.
+
+
+\begin{DoxyParams}{Parameters}
+{\em from} & The starting point of the route. \\
+\hline
+{\em to} & The destination point of the route. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 165 of file functions.\+c.
+
+\hypertarget{functions_8h_a7f3802b77153d33a824ddde1ce71cf56}{\index{functions.\+h@{functions.\+h}!init\+\_\+field@{init\+\_\+field}}
+\index{init\+\_\+field@{init\+\_\+field}!functions.\+h@{functions.\+h}}
+\subsubsection[{init\+\_\+field}]{\setlength{\rightskip}{0pt plus 5cm}void init\+\_\+field (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a7f3802b77153d33a824ddde1ce71cf56}
+
+
+Definition at line 22 of file functions.\+c.
+
+\hypertarget{functions_8h_a8a5c97821f643533d9fb99d1821c2ed2}{\index{functions.\+h@{functions.\+h}!iterate\+\_\+route@{iterate\+\_\+route}}
+\index{iterate\+\_\+route@{iterate\+\_\+route}!functions.\+h@{functions.\+h}}
+\subsubsection[{iterate\+\_\+route}]{\setlength{\rightskip}{0pt plus 5cm}void iterate\+\_\+route (
+\begin{DoxyParamCaption}
+\item[{int}]{init\+\_\+dir, }
+\item[{{\bf coord}}]{to}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a8a5c97821f643533d9fb99d1821c2ed2}
+Iterate over the array created by \hyperlink{functions_8h_a37b3ef1792a1aa0e15fa86c065e0b75e}{clear\+\_\+marks()} and give directions.
+
+
+\begin{DoxyParams}{Parameters}
+{\em init\+\_\+dir} & Initial direction. The direction in which the vehicle is before following the routes directions. \\
+\hline
+{\em to} & The destination coordinate. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 212 of file functions.\+c.
+
+\hypertarget{functions_8h_add9340b264bd1d681d733d5c0040f17b}{\index{functions.\+h@{functions.\+h}!link\+\_\+nodes@{link\+\_\+nodes}}
+\index{link\+\_\+nodes@{link\+\_\+nodes}!functions.\+h@{functions.\+h}}
+\subsubsection[{link\+\_\+nodes}]{\setlength{\rightskip}{0pt plus 5cm}void link\+\_\+nodes (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_add9340b264bd1d681d733d5c0040f17b}
+
+
+Definition at line 48 of file functions.\+c.
+
+\hypertarget{functions_8h_acf376221f1504defdf0883fff3cdef87}{\index{functions.\+h@{functions.\+h}!node\+\_\+to\+\_\+checkpoint@{node\+\_\+to\+\_\+checkpoint}}
+\index{node\+\_\+to\+\_\+checkpoint@{node\+\_\+to\+\_\+checkpoint}!functions.\+h@{functions.\+h}}
+\subsubsection[{node\+\_\+to\+\_\+checkpoint}]{\setlength{\rightskip}{0pt plus 5cm}int node\+\_\+to\+\_\+checkpoint (
+\begin{DoxyParamCaption}
+\item[{{\bf node}}]{n}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_acf376221f1504defdf0883fff3cdef87}
+Find to which checkpoint a node is connected.
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & \hyperlink{struct_node}{Node} to find the connected checkpoint of. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The number of the checkpoint. 
+\end{DoxyReturn}
+
+
+Definition at line 144 of file functions.\+c.
+
+\hypertarget{functions_8h_aa7d859d6aaff63fe1956a3aa11517b68}{\index{functions.\+h@{functions.\+h}!print\+\_\+field@{print\+\_\+field}}
+\index{print\+\_\+field@{print\+\_\+field}!functions.\+h@{functions.\+h}}
+\subsubsection[{print\+\_\+field}]{\setlength{\rightskip}{0pt plus 5cm}void print\+\_\+field (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_aa7d859d6aaff63fe1956a3aa11517b68}
+
+
+Print the field. 
+
+Print all the checkpoints and nodes of the fields. 
+
+Definition at line 81 of file functions.\+c.
+
+\hypertarget{functions_8h_a7bd7bdf732da189e2a01c788fa840936}{\index{functions.\+h@{functions.\+h}!print\+\_\+route\+\_\+marks@{print\+\_\+route\+\_\+marks}}
+\index{print\+\_\+route\+\_\+marks@{print\+\_\+route\+\_\+marks}!functions.\+h@{functions.\+h}}
+\subsubsection[{print\+\_\+route\+\_\+marks}]{\setlength{\rightskip}{0pt plus 5cm}void print\+\_\+route\+\_\+marks (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a7bd7bdf732da189e2a01c788fa840936}
+Print all route marks 
+
+Definition at line 303 of file functions.\+c.
+
+\hypertarget{functions_8h_a60ba7f0d6f9ae1ea1362ae2f044bdb2b}{\index{functions.\+h@{functions.\+h}!read\+\_\+mines@{read\+\_\+mines}}
+\index{read\+\_\+mines@{read\+\_\+mines}!functions.\+h@{functions.\+h}}
+\subsubsection[{read\+\_\+mines}]{\setlength{\rightskip}{0pt plus 5cm}int read\+\_\+mines (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a60ba7f0d6f9ae1ea1362ae2f044bdb2b}
+Reads mines from the mines file and calls \hyperlink{functions_8h_a6921ef449cb61e8e958e802dea870a5d}{add\+\_\+mine\+\_\+to\+\_\+field()}.
+
+\begin{DoxyReturn}{Returns}
+0 if successfull, 1 if mines file not found. 
+\end{DoxyReturn}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{functions_8h_a6921ef449cb61e8e958e802dea870a5d}{add\+\_\+mine\+\_\+to\+\_\+field()} 
+\end{DoxySeeAlso}
+
+
+Definition at line 346 of file functions.\+c.
+
+\hypertarget{functions_8h_a408ba79aae6e669465a309ff2e40d776}{\index{functions.\+h@{functions.\+h}!return\+\_\+coord@{return\+\_\+coord}}
+\index{return\+\_\+coord@{return\+\_\+coord}!functions.\+h@{functions.\+h}}
+\subsubsection[{return\+\_\+coord}]{\setlength{\rightskip}{0pt plus 5cm}{\bf coord} return\+\_\+coord (
+\begin{DoxyParamCaption}
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a408ba79aae6e669465a309ff2e40d776}
+\hypertarget{functions_8h_ace8976a31015e5f8c4f4ceb99b4b9a6d}{\index{functions.\+h@{functions.\+h}!route\+\_\+len@{route\+\_\+len}}
+\index{route\+\_\+len@{route\+\_\+len}!functions.\+h@{functions.\+h}}
+\subsubsection[{route\+\_\+len}]{\setlength{\rightskip}{0pt plus 5cm}int route\+\_\+len (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{a, }
+\item[{{\bf coord}}]{b}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_ace8976a31015e5f8c4f4ceb99b4b9a6d}
+Give the length of the shortest route from coordinate a to coordinate b.
+
+
+\begin{DoxyParams}{Parameters}
+{\em a} & Starttig coordinate of the route. \\
+\hline
+{\em b} & Destination. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The length of the route. 
+\end{DoxyReturn}
+
+
+Definition at line 317 of file functions.\+c.
+
+\hypertarget{functions_8h_a7fe57d21be2d6fd130905ab6e94066a0}{\index{functions.\+h@{functions.\+h}!route\+\_\+marks@{route\+\_\+marks}}
+\index{route\+\_\+marks@{route\+\_\+marks}!functions.\+h@{functions.\+h}}
+\subsubsection[{route\+\_\+marks}]{\setlength{\rightskip}{0pt plus 5cm}void route\+\_\+marks (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{from, }
+\item[{{\bf coord}}]{to}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a7fe57d21be2d6fd130905ab6e94066a0}
+Mark all nodes according to Lee algorithm.
+
+
+\begin{DoxyParams}{Parameters}
+{\em from} & The starting point of the route. \\
+\hline
+{\em to} & The destination of the route. \\
+\hline
+\end{DoxyParams}
+\begin{DoxySeeAlso}{See also}
+\hyperlink{functions_8h_a3b53b5977fae818c772c9584cd6ed40c}{find\+\_\+shortest\+\_\+route()} 
+\end{DoxySeeAlso}
+
+
+Definition at line 273 of file functions.\+c.
+
+\hypertarget{functions_8h_aaddc4d6edc0a09c19994ca15f7c99b9c}{\index{functions.\+h@{functions.\+h}!route\+\_\+sequence@{route\+\_\+sequence}}
+\index{route\+\_\+sequence@{route\+\_\+sequence}!functions.\+h@{functions.\+h}}
+\subsubsection[{route\+\_\+sequence}]{\setlength{\rightskip}{0pt plus 5cm}void route\+\_\+sequence (
+\begin{DoxyParamCaption}
+\item[{int $\ast$}]{checks, }
+\item[{int}]{checks\+\_\+num}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_aaddc4d6edc0a09c19994ca15f7c99b9c}
+Find the route from checkpoint i to checkpoint (i + 1) in the checkpoint array, in the given order. Go to all given checkpoints this way.
+
+
+\begin{DoxyParams}{Parameters}
+{\em checks} & Array of destination checkpoints in order. \\
+\hline
+{\em checks\+\_\+num} & Number of checkpoints i.\+e. the length of the 'checks' array. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 335 of file functions.\+c.
+
+\hypertarget{functions_8h_a567b0c657ac07d450120ac81edd010f4}{\index{functions.\+h@{functions.\+h}!save\+\_\+mine\+\_\+to\+\_\+file@{save\+\_\+mine\+\_\+to\+\_\+file}}
+\index{save\+\_\+mine\+\_\+to\+\_\+file@{save\+\_\+mine\+\_\+to\+\_\+file}!functions.\+h@{functions.\+h}}
+\subsubsection[{save\+\_\+mine\+\_\+to\+\_\+file}]{\setlength{\rightskip}{0pt plus 5cm}void save\+\_\+mine\+\_\+to\+\_\+file (
+\begin{DoxyParamCaption}
+\item[{{\bf coord}}]{a, }
+\item[{{\bf coord}}]{b}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_a567b0c657ac07d450120ac81edd010f4}
+Saves a found mine to the mines file.
+
+
+\begin{DoxyParams}{Parameters}
+{\em a,b} & Coords between which the mine is present. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 391 of file functions.\+c.
+
+\hypertarget{functions_8h_abd647fe75c7c248cd6c158f03ce15f99}{\index{functions.\+h@{functions.\+h}!short\+\_\+sort@{short\+\_\+sort}}
+\index{short\+\_\+sort@{short\+\_\+sort}!functions.\+h@{functions.\+h}}
+\subsubsection[{short\+\_\+sort}]{\setlength{\rightskip}{0pt plus 5cm}void short\+\_\+sort (
+\begin{DoxyParamCaption}
+\item[{int $\ast$}]{check, }
+\item[{int}]{num}
+\end{DoxyParamCaption}
+)}}\label{functions_8h_abd647fe75c7c248cd6c158f03ce15f99}
+Sort all destination checkpoints for the shortest order i.\+e. shortest total route length.
+
+
+\begin{DoxyParams}{Parameters}
+{\em check} & Array of numbers of all destination checkpoints in random order. \\
+\hline
+{\em num} & Number of destination checkpoints i.\+e. length of the int array 'check'. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 322 of file functions.\+c.
+
+
+
+\subsection{Variable Documentation}
+\hypertarget{functions_8h_a332f091601a2d32ca549f6db3cf4a07f}{\index{functions.\+h@{functions.\+h}!field@{field}}
+\index{field@{field}!functions.\+h@{functions.\+h}}
+\subsubsection[{field}]{\setlength{\rightskip}{0pt plus 5cm}{\bf node} field\mbox{[}{\bf X\+D\+I\+M}\mbox{]}\mbox{[}{\bf Y\+D\+I\+M}\mbox{]}}}\label{functions_8h_a332f091601a2d32ca549f6db3cf4a07f}
+
+
+Definition at line 14 of file functions.\+c.
+

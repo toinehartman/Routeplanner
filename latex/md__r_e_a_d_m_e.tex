@@ -1,0 +1,38 @@
+This is a routeplanner, whick gives the shortest route between two points on an 5 by 5 grid. \subsection*{Synopsis}
+
+This routeplanner find a route between a starting checkpoint on the edge of a {\bfseries 5 by 5 grid} and one or more endpoints. It can go by the checkpoints in a given order or via the shortest route that visits them all. 
+
+\subsection*{Code Example}
+
+``` ➜ ./bin/routeplanner.out 1 5 \begin{DoxyVerb}(0, 4)   9:(1, 4)   8:(2, 4)   7:(3, 4)     (4, 4)
+\end{DoxyVerb}
+ 10\+:(0, 3) (1, 3) (2, 3) (3, 3) 6\+:(4, 3) 11\+:(0, 2) (1, 2) (2, 2) (3, 2) 5\+:(4, 2) 12\+:(0, 1) (1, 1) (2, 1) (3, 1) 4\+:(4, 1) (0, 0) 1\+:(1, 0) 2\+:(2, 0) 3\+:(3, 0) (4, 0)
+
+Start 1\+: (1, 0) End 5\+: (4, 2)
+
+(1, 0) ▷ (2, 0) ▷ (3, 0) ▷ (4, 0) ▷ (4, 1) ▷ (4, 2) ```
+
+\subsection*{Motivation}
+
+This program wa written to guide an autonomous robot, as part of E\+P\+O2, a project of Electrical Engineering at the University of Technology Delft.
+
+\subsection*{Installation}
+
+``` cd $<$download\+\_\+folder$>$/\+Routeplanner\textbackslash{} Toine/ make ``{\ttfamily  And then}./bin/routeplanner.out 1 5`, this will give the shortest route from checkpoint 1 to checkpoint 5.
+
+\subsection*{Contributors}
+
+Projectgroep B2\+:
+
+
+\begin{DoxyItemize}
+\item Daniël Brouwer
+\item Toine Hartman
+\item Dennis de Jong
+\item Sam de Jong
+\item George Koolman
+\item Wesley Umans
+\item Luc van Wietmarschen
+\end{DoxyItemize}
+
+The method to find the shortest route is based on \href{http://en.wikipedia.org/wiki/Lee_algorithm}{\tt Lee's algorithm}. 

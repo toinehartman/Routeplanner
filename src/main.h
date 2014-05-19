@@ -1,3 +1,7 @@
+/**
+ @file main.h The main header file.
+ */
+
 #ifndef MAIN_H
 #define MAIN_H
 
