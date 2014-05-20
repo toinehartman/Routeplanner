@@ -48,3 +48,6 @@ xcuserdata
 *.moved-aside
 DerivedData
 *.xcuserstate
+
+# Discard generated documentation
+docs/html

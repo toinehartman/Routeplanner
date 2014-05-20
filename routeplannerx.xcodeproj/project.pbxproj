@@ -6,11 +6,6 @@
 	objectVersion = 46;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		34A3C2FB192619D800C72616 /* functions.c in Sources */ = {isa = PBXBuildFile; fileRef = 34A3C2F7192619D800C72616 /* functions.c */; };
-		34A3C2FC192619D800C72616 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 34A3C2F9192619D800C72616 /* main.c */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXCopyFilesBuildPhase section */
 		34A3C2E81926194400C72616 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -25,11 +20,6 @@
 
 /* Begin PBXFileReference section */
 		34A3C2EA1926194400C72616 /* routeplannerx */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = routeplannerx; sourceTree = BUILT_PRODUCTS_DIR; };
-		34A3C2F6192619D800C72616 /* data.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = data.h; path = src/data.h; sourceTree = SOURCE_ROOT; };
-		34A3C2F7192619D800C72616 /* functions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = functions.c; path = src/functions.c; sourceTree = SOURCE_ROOT; };
-		34A3C2F8192619D800C72616 /* functions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = functions.h; path = src/functions.h; sourceTree = SOURCE_ROOT; };
-		34A3C2F9192619D800C72616 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = main.c; path = src/main.c; sourceTree = SOURCE_ROOT; };
-		34A3C2FA192619D800C72616 /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = main.h; path = src/main.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,11 +52,6 @@
 		34A3C2EC1926194400C72616 /* routeplannerx */ = {
 			isa = PBXGroup;
 			children = (
-				34A3C2F6192619D800C72616 /* data.h */,
-				34A3C2F7192619D800C72616 /* functions.c */,
-				34A3C2F8192619D800C72616 /* functions.h */,
-				34A3C2F9192619D800C72616 /* main.c */,
-				34A3C2FA192619D800C72616 /* main.h */,
 			);
 			path = routeplannerx;
 			sourceTree = "<group>";
@@ -122,8 +107,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				34A3C2FC192619D800C72616 /* main.c in Sources */,
-				34A3C2FB192619D800C72616 /* functions.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
