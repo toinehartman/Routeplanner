@@ -63,4 +63,19 @@ route_t *route_find(field_t *field,
  */
 void route_print(route_t *route);
 
+/**
+ *
+ */
+drive_t node_drive_direction(compass_t initial_dir, compass_t new_dir);
+
+/**
+ *
+ */
+compass_t node_compass_direction(node_t *current, node_t *next);
+
+/**
+ *
+ */
+char *print_drive_direction(drive_t drive_dir);
+
 #endif /* ROUTE_H */

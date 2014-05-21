@@ -13,7 +13,14 @@ typedef enum {
     EAST,
     SOUTH,
     WEST
-} dir_t;
+} compass_t;
+
+typedef enum {
+    FORWARD,
+    RIGHT,
+    BACKWARD,
+    LEFT
+} drive_t;
 
 typedef struct coord_s {
     size_t x, y;

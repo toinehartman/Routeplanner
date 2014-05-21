@@ -124,7 +124,7 @@ void lee_backtrack(field_t *field,
 
         steps[num_steps - 1] = current_node;
 
-        for(dir_t dir = NORTH; dir <= WEST; ++dir) {
+        for(compass_t dir = NORTH; dir <= WEST; ++dir) {
             node_t *node;
 
             node = current_node->neighbours[dir];
@@ -173,18 +173,72 @@ route_t *route_find(field_t *field,
 
 void route_print(route_t *route)
 {
+    compass_t previous_dir;
+    node_t *node = NULL, *next = NULL;
+
+
+    assert(route != NULL);
+    assert(route->num_steps >= 1);
+
+    previous_dir = node_get_checkpoint_direction(route->steps[route->num_steps - 1]);
+
     printf("<route>{start: (%zu, %zu), destination: (%zu, %zu)}[\n",
            route->start->location.x,
            route->start->location.y,
            route->destination->location.x,
            route->destination->location.y);
 
-    for(size_t i = 0; i < route->num_steps; ++i) {
-        node_t *node;
+    for(long i = route->num_steps - 1; i > 0; --i) {
+        compass_t new_dir;
 
         node = route->steps[i];
+        next = route->steps[i - 1];
+        new_dir = node_compass_direction(node, next);
 
-        printf("  (%zu, %zu)\n", node->location.x, node->location.y);
+        printf("  (%zu, %zu)[%s]\n", node->location.x, node->location.y, print_drive_direction(node_drive_direction(previous_dir, new_dir)));
+
+        previous_dir = new_dir;
     }
+    node = next;
+
+    printf("  (%zu, %zu)[%s]\n",
+           node->location.x,
+           node->location.y,
+           print_drive_direction(node_drive_direction(previous_dir,
+                                                      (node_get_checkpoint_direction(node) + 2) % 4)));
     printf("]\n");
+}
+
+drive_t node_drive_direction(compass_t initial_dir, compass_t new_dir)
+{
+    if(initial_dir == new_dir)
+        return FORWARD;
+    else if(initial_dir % 2 == new_dir % 2)
+        return BACKWARD;
+    else if((initial_dir - new_dir) % 4 == 3 || (initial_dir - new_dir) % 4 == -1)
+        return RIGHT;
+    else // if((initial_dir - new_dir) % 4 == 1 || (initial_dir - new_dir) % 4 == -3)
+        return LEFT;
+}
+
+compass_t node_compass_direction(node_t *current, node_t *next)
+{
+    assert(current != NULL);
+    assert(next != NULL);
+    
+    if(current->location.x == next->location.x)
+        return current->location.y < next->location.y ? NORTH : SOUTH;
+    else // if(current->location.y == next->location.y)
+        return current->location.x < next->location.x ? EAST : WEST;
+}
+
+char *print_drive_direction(drive_t drive_dir)
+{
+    switch(drive_dir) {
+        case FORWARD: return "FORWARD";
+        case BACKWARD: return "BACKWARD";
+        case RIGHT: return "RIGHT";
+        case LEFT: return "LEFT";
+        default: return "UNKNOWN";
+    }
 }

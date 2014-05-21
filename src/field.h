@@ -101,4 +101,6 @@ node_t *field_get_node(field_t *field, coord_t coord);
  */
 size_t node_get_checkpoint(node_t *node);
 
+compass_t node_get_checkpoint_direction(node_t *node);
+
 #endif /* FIELD_H */

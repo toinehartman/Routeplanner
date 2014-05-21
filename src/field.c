@@ -127,3 +127,19 @@ size_t node_get_checkpoint(node_t *node)
 
     return SIZE_MAX;
 }
+
+compass_t node_get_checkpoint_direction(node_t *node)
+{
+    coord_t coord;
+
+    coord = node->location;
+
+    if(coord.y == 0)
+        return NORTH;
+    else if(coord.y == FIELD_SIZE_HEIGHT - 1)
+        return SOUTH;
+    else if(coord.x == 0)
+        return EAST;
+    else // if(coord.x == FIELD_SIZE_WIDTH - 1)
+        return WEST;
+}
