@@ -30,8 +30,7 @@ int main(int argc, char *argv[]) {
     mine = mineset_add_mine(mineset,
                      field_get_node(field, (coord_t){1, 1}),
                      field_get_node(field, (coord_t){1, 2}));
-    if(mine != NULL)
-        mine_apply(mine, field);
+    mine_apply(mine, field);
     mineset_print(mineset);
 
     route = route_find(field, (coord_t){1, 0}, (coord_t){4, 3});

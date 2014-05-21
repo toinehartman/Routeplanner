@@ -124,7 +124,7 @@ mine_t *mineset_add_mine(mineset_t *mineset, node_t *black, node_t *yellow)
         if((existing_mine->black == black && existing_mine->yellow == yellow)
            || (existing_mine->black == yellow && existing_mine->yellow == black)) {
                free(mine);
-               return NULL;
+               return existing_mine;
            } // Mine already exists in mineset, don't add it.
     }
 
