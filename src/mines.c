@@ -100,6 +100,7 @@ void mineset_print(mineset_t *mineset)
                mine->yellow->location.x,
                mine->yellow->location.y);
     }
+    printf("\n");
 }
 
 mine_t *mineset_add_mine(mineset_t *mineset, node_t *black, node_t *yellow)
@@ -115,6 +116,18 @@ mine_t *mineset_add_mine(mineset_t *mineset, node_t *black, node_t *yellow)
 
     mine->black = black;
     mine->yellow = yellow;
+
+    for(size_t i = 0; i < mineset->num_mines; ++i) {
+        mine_t *existing_mine;
+
+        existing_mine = mineset->mines[i];
+        if((existing_mine->black == black && existing_mine->yellow == yellow)
+           || (existing_mine->black == yellow && existing_mine->yellow == black)) {
+               free(mine);
+               return NULL;
+           } // Mine already exists in mineset, don't add it.
+    }
+
 
     ++mineset->num_mines;
     mineset->mines = realloc(mineset->mines, mineset->num_mines * sizeof(mine_t *));

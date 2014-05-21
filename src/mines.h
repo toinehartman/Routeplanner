@@ -42,16 +42,19 @@ void mineset_destroy(mineset_t *mineset);
  *
  * @param mineset The mineset.
  * @param field The field.
- * @return true on succes, false on failure.
+ * @return true on succes, false when unable to open file with read access.
  */
 bool mineset_read(mineset_t *mineset, field_t *field);
 
 /**
- * Read from the mine file.
+ * Write to the mines file.
  *
- * @param mineset The mineset to write to.
- * @param filename The filename of the mines file.
- * @return true on succes, false on failure.
+ * Populate the mines file with the data in the mineset. File is
+ * overwritten, not appended.
+ *
+ * @param mineset The mineset to read from.
+ * @param filename The filename of the mines file to write to.
+ * @return true on succes, false when unable to open file with write access.
  */
 bool mineset_write(mineset_t *mineset, const char *filename);
 
