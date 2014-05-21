@@ -18,17 +18,20 @@ int main(int argc, char *argv[]) {
     mineset_t *mineset;
     const char *mine_file = "./mines.txt";
 
+    mine_t *mine;
+
     field = field_create();
     mineset = mineset_create(mine_file);
 
     if(mineset_read(mineset, field) == false)
         printf("mineset_read == false\n");
     mineset_apply(mineset, field);
-    mineset_print(mineset);
 
-//    mineset_add_mine(mineset,
-//                     field_get_node(field, (coord_t){1, 1}),
-//                     field_get_node(field, (coord_t){1, 2}));
+    mine = mineset_add_mine(mineset,
+                     field_get_node(field, (coord_t){1, 1}),
+                     field_get_node(field, (coord_t){1, 2}));
+    mine_apply(mine, field);
+    mineset_print(mineset);
 
     route = route_find(field, (coord_t){1, 0}, (coord_t){4, 3});
     field_print(field);

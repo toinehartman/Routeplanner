@@ -46,6 +46,13 @@ void mineset_destroy(mineset_t *mineset);
  */
 bool mineset_read(mineset_t *mineset, field_t *field);
 
+/**
+ * Read from the mine file.
+ *
+ * @param mineset The mineset to write to.
+ * @param filename The filename of the mines file.
+ * @return true on succes, false on failure.
+ */
 bool mineset_write(mineset_t *mineset, const char *filename);
 
 /**
