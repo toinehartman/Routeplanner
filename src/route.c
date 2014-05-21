@@ -142,7 +142,7 @@ void lee_backtrack(field_t *field,
         current_node = min_node;
 
         ++num_steps;
-        steps = realloc(steps, num_steps);
+        steps = realloc(steps, num_steps * sizeof(node_t *));
         assert(steps != NULL);
     }
 

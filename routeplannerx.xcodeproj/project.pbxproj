@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		343AFC7F192C136200CEBC22 /* mines.c in Sources */ = {isa = PBXBuildFile; fileRef = 343AFC7D192C136100CEBC22 /* mines.c */; };
 		34E47259192B7ECF0061E077 /* field.c in Sources */ = {isa = PBXBuildFile; fileRef = 34E47250192B7ECF0061E077 /* field.c */; };
 		34E4725A192B7ECF0061E077 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 34E47253192B7ECF0061E077 /* main.c */; };
 		34E4725B192B7ECF0061E077 /* route.c in Sources */ = {isa = PBXBuildFile; fileRef = 34E47255192B7ECF0061E077 /* route.c */; };
@@ -26,6 +27,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		343AFC7D192C136100CEBC22 /* mines.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = mines.c; path = src/mines.c; sourceTree = SOURCE_ROOT; };
+		343AFC7E192C136200CEBC22 /* mines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mines.h; path = src/mines.h; sourceTree = SOURCE_ROOT; };
 		34A3C2EA1926194400C72616 /* 	 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "	"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34E47250192B7ECF0061E077 /* field.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = field.c; path = src/field.c; sourceTree = SOURCE_ROOT; };
 		34E47251192B7ECF0061E077 /* field.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = field.h; path = src/field.h; sourceTree = SOURCE_ROOT; };
@@ -75,6 +78,8 @@
 				34E47256192B7ECF0061E077 /* route.h */,
 				34E47257192B7ECF0061E077 /* types.c */,
 				34E47258192B7ECF0061E077 /* types.h */,
+				343AFC7D192C136100CEBC22 /* mines.c */,
+				343AFC7E192C136200CEBC22 /* mines.h */,
 			);
 			path = routeplannerx;
 			sourceTree = "<group>";
@@ -130,6 +135,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				343AFC7F192C136200CEBC22 /* mines.c in Sources */,
 				34E4725B192B7ECF0061E077 /* route.c in Sources */,
 				34E4725C192B7ECF0061E077 /* types.c in Sources */,
 				34E4725A192B7ECF0061E077 /* main.c in Sources */,
