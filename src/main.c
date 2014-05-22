@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
     mineset = mineset_create(mine_file);
 
     if(mineset_read(mineset, field) == false)
-        printf("mineset_read == false\n");
+        printf("Mines couldn't be read from file.\n");
     mineset_apply(mineset, field);
 
     mine = mineset_add_mine(mineset,
