@@ -101,6 +101,27 @@ node_t *field_get_node(field_t *field, coord_t coord);
  */
 size_t node_get_checkpoint(node_t *node);
 
+/**
+ * Get the direction of a checkpoint.
+ *
+ * Find the compass direction when driving out of the specified checkpoint.
+ * @param node The node to which the checkpoint is connected.
+ * @return The compass direction.
+ */
 compass_t node_get_checkpoint_direction(node_t *node);
+
+/**
+ * Sort the destination checkpoints.
+ *
+ * @param field The field.
+ * @param start The start node.
+ * @param checkpoints The destination checkpoints.
+ * @param num_checkpoints The number of destination checkpoints.
+ * @return The destinations sorted for the shortest total route.
+ */
+node_t **field_sort_checkpoints(field_t *field,
+                                node_t *start,
+                                node_t **checkpoints,
+                                size_t num_checkpoints);
 
 #endif /* FIELD_H */

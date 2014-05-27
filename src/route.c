@@ -152,6 +152,15 @@ void lee_backtrack(field_t *field,
     route->steps = steps;
 }
 
+size_t lee_get_lenght(field_t *field, coord_t start, coord_t destination)
+{
+    assert(field != NULL);
+
+    lee_mark_cells(field, start, destination);
+
+    return field_get_node(field, destination)->lee_value - field_get_node(field, start)->lee_value;
+}
+
 route_t *route_find(field_t *field,
                     coord_t start,
                     coord_t destination)

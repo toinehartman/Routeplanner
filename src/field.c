@@ -143,3 +143,31 @@ compass_t node_get_checkpoint_direction(node_t *node)
     else // if(coord.x == FIELD_SIZE_WIDTH - 1)
         return WEST;
 }
+
+node_t **field_sort_checkpoints(field_t *field,
+                            node_t *start,
+                            node_t **checkpoints,
+                            size_t num_checkpoints)
+{
+    checkpoints = realloc(checkpoints, ++num_checkpoints * sizeof(node_t *));
+    for(size_t i = num_checkpoints - 2; i >= 1; ++i)
+        checkpoints[i] = checkpoints[i - 1];
+
+    checkpoints[0] = start;
+
+    for(size_t i = 0; i < num_checkpoints; ++i) {
+        for(size_t j = i + 1; j < num_checkpoints; ++j) {
+            for(size_t k = j + 1; k < num_checkpoints; ++k) {
+                if (lee_get_lenght(field, checkpoints[i]->location, checkpoints[k]->location) < lee_get_lenght(field, checkpoints[i]->location, checkpoints[j]->location)) {
+                    node_t *tmp;
+
+                    tmp = checkpoints[j];
+                    checkpoints[j] = checkpoints[k];
+                    checkpoints[k] = tmp;
+                }
+            }
+        }
+    }
+
+    return checkpoints;
+}
