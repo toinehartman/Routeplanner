@@ -25,11 +25,6 @@ Icon
 .Spotlight-V100
 .Trashes
 
-# Code::Blocks project files
-*.cbp
-*.depend
-*.layout
-
 # Misc
 *.tgz
 *.sh
@@ -48,3 +43,5 @@ xcuserdata
 *.moved-aside
 DerivedData
 *.xcuserstate
+
+docs/html
