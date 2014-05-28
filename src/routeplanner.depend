@@ -1,0 +1,44 @@
+# depslib dependency file v1.0
+1401203951 source:c:\users\toine\desktop\routeplanner_orig\src\functions.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<math.h>
+	<Windows.h>
+	<stdbool.h>
+	"zigbee.h"
+	"main.h"
+	"data.h"
+	"functions.h"
+
+1401198350 c:\users\toine\desktop\routeplanner_orig\src\main.h
+	"data.h"
+	"functions.h"
+
+1400587294 c:\users\toine\desktop\routeplanner_orig\src\data.h
+
+1401200404 c:\users\toine\desktop\routeplanner_orig\src\functions.h
+	<Windows.h>
+	<stdbool.h>
+	"main.h"
+	"data.h"
+
+1401200431 source:c:\users\toine\desktop\routeplanner_orig\src\main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	"main.h"
+	"data.h"
+	"functions.h"
+	"zigbee.h"
+
+1401204397 c:\users\toine\desktop\routeplanner_orig\src\zigbee.h
+	<Windows.h>
+
+1401204681 source:c:\users\toine\desktop\routeplanner_orig\src\zigbee.c
+	<stdio.h>
+	<stdlib.h>
+	<Windows.h>
+	<string.h>
+	"zigbee.h"
+
