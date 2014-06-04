@@ -35,4 +35,11 @@ typedef struct Node {
     struct Node *west; /**< Pointer to the western neighbour node. */
 } node;
 
+typedef enum State {
+    START,
+    REAL_C,
+    FAKE_C,
+    CHECKPOINT
+} state;
+
 #endif /* DATA_H */
