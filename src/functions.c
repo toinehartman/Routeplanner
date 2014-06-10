@@ -268,7 +268,6 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
                 //                printf("starting curr_dir: %c\n", (char)next_dir);
 
                 ret_value = zigbee_write(hSerial, byteBuffer, next_dir, START);
-
                 printf("(%d, %d) -> (%d, %d)[%c]\n", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, next_dir);
                 if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]\n", j, compass_int(init_dir), compass_int(compass_direction(route[j], route[j - 1])));
             }
@@ -279,7 +278,6 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
 
                 //                printf("starting prev_dir: %c\n", compass_int(prev_dir));
                 //                printf("starting next_dir: %c\n", (char)next_dir);
-
                 ret_value = zigbee_write(hSerial, byteBuffer, next_dir, REAL_C);
 
 
@@ -304,14 +302,13 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
         {
             save_mine_to_file(route[j], route[j - 1]);
             add_mine_to_field(route[j], route[j - 1]);
-//            read_mines();
+            read_mines();
 
             printf("Mine saved, calculating new route...\n\n");
             find_shortest_route(route[j], to);
             iterate_route(hSerial, byteBuffer, (init_dir + 2) % 4, to);
             return;
-        }
-        else if (ret_value != 'C' && ret_value != 'M')
+        } else if (ret_value != 'C' && ret_value != 'M')
             fprintf(stderr, "Answer: %c\n", ret_value);
 
         //        printf("prev_dir: %c\n", compass_int(prev_dir));
@@ -610,6 +607,7 @@ char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_st
             printf("Checkpoint, draaien...\n");
             byteBuffer[0] = 'O';
             writeByte(hSerial, byteBuffer);
+            sent_previous = byteBuffer[0];
             return 'E';
         }
     }
