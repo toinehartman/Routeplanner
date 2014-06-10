@@ -15,6 +15,18 @@
 #define YDIM		5		/* define y-dimension */
 #define ARR_LEN(a)	(sizeof(a) / sizeof(a[0]))		/* used to determine the length of arrays */
 
+#ifdef _WIN32
+
+# include <time.h>
+# define M_SLEEP(t)    Sleep(t)
+
+#elif __APPLE__
+
+# include <unistd.h>
+# define M_SLEEP(t)    usleep(t * 1000)
+
+#endif
+
 extern node field[XDIM][YDIM];
 
 coord return_coord(int x, int y);
@@ -182,6 +194,6 @@ char compass_int(int comp);
  */
 int cp_direction(int cp);
 
-char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, bool checkpoint);
+char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_state);
 
 #endif /* FUNCTIONS_H */

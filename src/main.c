@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "main.h"
 #include "data.h"
@@ -39,10 +40,12 @@ int main(int argc, char* argv[])
         if(GetLastError()== ERROR_FILE_NOT_FOUND)
         {
             /* //serial port does not exist. Inform user.*/
-            printf(" serial port does not exist \n");
+            assert(!"Serial port does not exist!" && COMPORT);
+            return 1;
         }
         /*    //some other error occurred. Inform user.*/
-        printf(" some other error occured. Inform user.\n");
+        assert(!"Some other error occured. Inform user.");
+        return 2;
     }
     /*
         //----------------------------------------------------------
@@ -72,11 +75,9 @@ int main(int argc, char* argv[])
         if (cp[0] != START_CP)
         {
             cp_num++;
-            if ((cp = (int*) realloc(cp, (cp_num) * sizeof(int))) == NULL)
-            {
-                printf("ERROR: Unable to allocate enough memory for all destinations!\n");
-                exit(EXIT_FAILURE);
-            }
+            cp = (int*) realloc(cp, (cp_num) * sizeof(int));
+
+            assert(cp != NULL);
 
             for (i = cp_num - 1; i > 0; i--)
                 cp[i] = cp[i - 1];
@@ -104,16 +105,29 @@ int main(int argc, char* argv[])
     link_nodes();
     print_field();
 
-    short_sort(cp, cp_num);
+    char ans;
+    printf("Snelste route of gegeven volgorde?? (y/n): ");
+    scanf("%c", &ans);
+    if(ans == 'y')
+        short_sort(cp, cp_num);
 
     printf("-------\nSorted!\n");
     for (j = 0; j < cp_num; j++) printf("%d ", cp[j]);
     printf("\n-------\n\n");
 
-    if (read_mines() == 1) printf("No mine file!\n");
+    read_mines();
+
+    byteBuffer[0] = 'V';
+    writeByte(hSerial, byteBuffer);
+    M_SLEEP(25);
+    byteBuffer[0] = ' ';
+    writeByte(hSerial, byteBuffer);
 
     route_sequence(hSerial, byteBuffer, cp, cp_num);
     free(cp);
+
+    byteBuffer[0] = '?';
+    writeByte(hSerial, byteBuffer);
 
     CloseHandle(hSerial);
 

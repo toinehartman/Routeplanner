@@ -5,7 +5,7 @@ TARGET		= routeplanner.out
 
 CC			= gcc
 # flags for gcc compiler
-CFLAGS		+=
+CFLAGS		+= -std=c99
 
 # flags for gcc linker
 LDFLAGS		= -lm

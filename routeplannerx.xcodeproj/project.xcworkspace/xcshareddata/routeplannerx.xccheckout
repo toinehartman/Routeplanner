@@ -5,36 +5,36 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>575D6B77-4BAE-4E7E-877B-A38013273701</string>
+	<string>28FDC011-A5F5-4E69-A775-ABABC7D4FA6A</string>
 	<key>IDESourceControlProjectName</key>
 	<string>routeplannerx</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>7E1AD098-867F-40E4-AFEB-34E0F4B65F28</key>
-		<string>https://github.com/toinehartman/routeplanner.git</string>
+		<key>769370CE-E2AC-41BF-BA5B-88A1E3E507FA</key>
+		<string>ssh://github.com/toinehartman/routeplanner</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>routeplannerx.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>7E1AD098-867F-40E4-AFEB-34E0F4B65F28</key>
+		<key>769370CE-E2AC-41BF-BA5B-88A1E3E507FA</key>
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/toinehartman/routeplanner.git</string>
+	<string>ssh://github.com/toinehartman/routeplanner</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>7E1AD098-867F-40E4-AFEB-34E0F4B65F28</string>
+	<string>769370CE-E2AC-41BF-BA5B-88A1E3E507FA</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>7E1AD098-867F-40E4-AFEB-34E0F4B65F28</string>
+			<string>769370CE-E2AC-41BF-BA5B-88A1E3E507FA</string>
 			<key>IDESourceControlWCCName</key>
-			<string>routeplanner</string>
+			<string>routeplanner_original</string>
 		</dict>
 	</array>
 </dict>

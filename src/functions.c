@@ -8,6 +8,7 @@
 #include <math.h>
 #include <Windows.h>
 #include <stdbool.h>
+#include <assert.h>
 
 #include "zigbee.h"
 #include "main.h"
@@ -218,10 +219,10 @@ void find_shortest_route(coord from, coord to)
         z++;
 
         node *neighbours[] = {	field[current.x][current.y].north,
-                                field[current.x][current.y].south,
-                                field[current.x][current.y].east,
-                                field[current.x][current.y].west
-                             };
+            field[current.x][current.y].south,
+            field[current.x][current.y].east,
+            field[current.x][current.y].west
+        };
 
         for (j = 0; j <= 3; j++)
         {
@@ -245,10 +246,10 @@ void find_shortest_route(coord from, coord to)
 void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
 {
     int j;
-    int first = -1, prev_dir;
+    int first = -1, prev_dir, next_dir;
     int end_cp;
 
-    char answer, direction;
+    char ret_value;
 
     route[z] = current;
 
@@ -260,24 +261,30 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
 
             if (j == first)
             {
-                direction = drive_direction(init_dir, route[j], route[j - 1]);
+                prev_dir = init_dir;
+                next_dir = drive_direction(prev_dir, route[j], route[j - 1]);
 
-                printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, direction);
-                if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]", j, compass_int(init_dir), compass_int(compass_direction(route[j], route[j - 1])));
-                printf("\n");
+                //                printf("starting prev_dir: %c\n", compass_int(prev_dir));
+                //                printf("starting curr_dir: %c\n", (char)next_dir);
 
-                zigbee_write(hSerial, byteBuffer, direction, false);
+                ret_value = zigbee_write(hSerial, byteBuffer, next_dir, START);
+
+                printf("(%d, %d) -> (%d, %d)[%c]\n", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, next_dir);
+                if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]\n", j, compass_int(init_dir), compass_int(compass_direction(route[j], route[j - 1])));
             }
             else if (j <= curr_route_len - 1)
             {
-                direction = drive_direction(prev_dir, route[j], route[j - 1]);
-
                 prev_dir = compass_direction(route[j + 1], route[j]);
-                printf("(%d, %d) -> (%d, %d)[%c]", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, direction);
-                if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]", j, compass_int(prev_dir), compass_int(compass_direction(route[j], route[j - 1])));
-                printf("\n");
+                next_dir = drive_direction(prev_dir, route[j], route[j - 1]);
 
-                zigbee_write(hSerial, byteBuffer, direction, false);
+                //                printf("starting prev_dir: %c\n", compass_int(prev_dir));
+                //                printf("starting next_dir: %c\n", (char)next_dir);
+
+                ret_value = zigbee_write(hSerial, byteBuffer, next_dir, REAL_C);
+
+
+                printf("(%d, %d) -> (%d, %d)[%c]\n", route[j].x, route[j].y, route[j - 1].x, route[j - 1].y, next_dir);
+                if (VERBOSE) printf("(j: %d)[prev: %c][curr: %c]\n", j, compass_int(prev_dir), compass_int(compass_direction(route[j], route[j - 1])));
             }
             else   /* vreemd, kan eigenlijk niet gebeuren */
             {
@@ -286,43 +293,45 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
                 fputs("\n", stderr);
                 exit(EXIT_FAILURE);
             }
-        }
-        else fprintf(stderr, "[ERROR] route[%d].x = %d, route[%d].y = %d\n", j, route[j].x, j , route[j].y);
+        } else
+            fprintf(stderr, "[ERROR] route[%d].x = %d, route[%d].y = %d\n", j, route[j].x, j , route[j].y);
 
-        printf("MINE? (y/n):\n");
+        printf("\n");
 
-        answer = zigbee_write(hSerial, byteBuffer, 'V', false);
+        ret_value = zigbee_write(hSerial, byteBuffer, 'V', FAKE_C);
 
-        if (answer == 'M')
+        if (ret_value == 'M')
         {
-            printf("MINE!!!\n");
-            printf("[O]\n\n");
             save_mine_to_file(route[j], route[j - 1]);
             add_mine_to_field(route[j], route[j - 1]);
-            printf("Mine saved, calculating new route...\n\n");
-            read_mines();
+//            read_mines();
 
+            printf("Mine saved, calculating new route...\n\n");
             find_shortest_route(route[j], to);
             iterate_route(hSerial, byteBuffer, (init_dir + 2) % 4, to);
             return;
         }
-        else if (answer == 'C')
-        {
-            printf("NO MINE!!!\n");
-            printf("[V]\n\n");
-        }
-        else fprintf(stderr, "Answer: %c\n", answer);
+        else if (ret_value != 'C' && ret_value != 'M')
+            fprintf(stderr, "Answer: %c\n", ret_value);
 
+        //        printf("prev_dir: %c\n", compass_int(prev_dir));
+        //        printf("next_dir: %c\n", next_dir);
     }
 
     prev_dir = compass_direction(route[j + 1], route[j]);
     end_cp = node_to_checkpoint(field[route[j].x][route[j].y]);
 
-    direction = drive_to_cp_direction(prev_dir, (cp_direction(end_cp) + 2) % 4);
+    next_dir = drive_to_cp_direction(prev_dir, (cp_direction(end_cp) + 2) % 4);
 
-    printf("(%d, %d) -> (%d)  [%c]\n", route[j].x, route[j].y, end_cp, direction);
     // At checkpoint
-    zigbee_write(hSerial, byteBuffer, direction, true);
+    ret_value = zigbee_write(hSerial, byteBuffer, next_dir, FAKE_C);
+    printf("ret_value: %c\n", ret_value);
+    printf("(%d, %d) -> (%d)  [%c]\n", route[j].x, route[j].y, end_cp, next_dir);
+
+//    zigbee_write(hSerial, byteBuffer, 'V', REAL_C);
+    M_SLEEP(50);
+
+    zigbee_write(hSerial, byteBuffer, 'O', CHECKPOINT);
 }
 
 void route_marks(coord from, coord to)
@@ -407,6 +416,9 @@ void route_sequence(HANDLE hSerial, char *byteBuffer, int *checks, int checks_nu
         iterate_route(hSerial, byteBuffer, cp_direction(checks[i]), checkpoint_to_coord(checks[i + 1]));
         if (i < checks_num - 2) printf("\n\n");
     }
+    M_SLEEP(25);
+    byteBuffer[0] = '?';
+    writeByte(hSerial, byteBuffer);
 }
 
 int read_mines()
@@ -419,7 +431,7 @@ int read_mines()
 
     if (mine_f == NULL)
     {
-        if (VERBOSE) printf("Mine file not found!\nContinuing without mines...\n");
+        if (VERBOSE) printf("Geen mine-file gevonden!\nDan maar geen mijnen :(\n");
         return 1;
     }
     else
@@ -432,20 +444,20 @@ int read_mines()
             {
                 switch(i)
                 {
-                case 1:
-                    a.x = c - '0';
-                    break;
-                case 2:
-                    a.y = c - '0';
-                    break;
-                case 4:
-                    b.x = c - '0';
-                    break;
-                case 5:
-                    b.y = c - '0';
-                    break;
-                default:
-                    printf("ERROR: i = %d", i);
+                    case 1:
+                        a.x = c - '0';
+                        break;
+                    case 2:
+                        a.y = c - '0';
+                        break;
+                    case 4:
+                        b.x = c - '0';
+                        break;
+                    case 5:
+                        b.y = c - '0';
+                        break;
+                    default:
+                        printf("ERROR: i = %d", i);
                 }
             }
             else if (c == '\n')
@@ -509,9 +521,9 @@ char drive_direction(int init_dir, coord now, coord to)
 char drive_to_cp_direction(int prev_dir, int new_dir)
 {
     /* 	's': straight
-    	'b': back
-    	'r': right
-    	'l': left */
+     'b': back
+     'r': right
+     'l': left */
 
     if (prev_dir == new_dir)
         return 'V';
@@ -543,20 +555,20 @@ char compass_int(int comp)
 {
     switch(comp)
     {
-    case 0:
-        return 'N';
+        case 0:
+            return 'N';
 
-    case 1:
-        return 'E';
+        case 1:
+            return 'E';
 
-    case 2:
-        return 'S';
+        case 2:
+            return 'S';
 
-    case 3:
-        return 'W';
+        case 3:
+            return 'W';
 
-    default:
-        return '!';
+        default:
+            return '!';
     }
 }
 
@@ -569,41 +581,36 @@ int cp_direction(int cp)
     return -1;
 }
 
-char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, bool checkpoint)
+char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_state)
 {
-    char previous;
+    char sent_previous = '1';
 
     while(1)
     {
-        //readByte(hSerial, byteBuffer);
+        byteBuffer[0] = ' ';
+        assert(readByte(hSerial, byteBuffer) == 0);
 
-        if(byteBuffer[0] == 'C')
-        {
+        if(route_state == CHECKPOINT) {
+            printf("Checkpoint, draaien...\n");
+            byteBuffer[0] = 'O';
+            writeByte(hSerial, byteBuffer);
+            return 'E';
+        } else if(byteBuffer[0] == 'C' || route_state == START) {
             byteBuffer[0] = command;
             writeByte(hSerial, byteBuffer);
-            readByte(hSerial, byteBuffer);
+            sent_previous = byteBuffer[0];
+//            printf("Crossing, sending %c\n", byteBuffer[0]);
             return 'C';
-        }
-        else if(byteBuffer[0] == 'W' && checkpoint)
-        {
+        } else if(byteBuffer[0] == 'M' && route_state == FAKE_C) {
             byteBuffer[0] = 'O';
             writeByte(hSerial, byteBuffer);
-            readByte(hSerial, byteBuffer);
-            return 'X';
-        }
-        else if(byteBuffer[0] == 'M')
-        {
-            byteBuffer[0] = 'O';
-            writeByte(hSerial, byteBuffer);
-            readByte(hSerial, byteBuffer);
+            sent_previous = byteBuffer[0];
             return 'M';
-        }
-        else
-        {
-            readByte(hSerial, byteBuffer);
-            if(previous != byteBuffer[0])
-                printf("Found %c, doing nothing\n", byteBuffer[0]);
-            previous = byteBuffer[0];
+        } else if(route_state == CHECKPOINT) {
+            printf("Checkpoint, draaien...\n");
+            byteBuffer[0] = 'O';
+            writeByte(hSerial, byteBuffer);
+            return 'E';
         }
     }
 }
