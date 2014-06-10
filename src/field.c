@@ -122,7 +122,7 @@ size_t node_get_checkpoint(node_t *node)
 
     for(size_t i = 0; i < 12; ++i) {
         if(node->field->checkpoints[i] == node)
-            return i;
+            return i + 1;
     }
 
     return SIZE_MAX;
@@ -131,6 +131,8 @@ size_t node_get_checkpoint(node_t *node)
 compass_t node_get_checkpoint_direction(node_t *node)
 {
     coord_t coord;
+
+    assert(node != NULL);
 
     coord = node->location;
 
@@ -145,29 +147,56 @@ compass_t node_get_checkpoint_direction(node_t *node)
 }
 
 node_t **field_sort_checkpoints(field_t *field,
-                            node_t *start,
-                            node_t **checkpoints,
-                            size_t num_checkpoints)
+                                node_t *start,
+                                node_t **destinations,
+                                size_t *num_destinations)
 {
-    checkpoints = realloc(checkpoints, ++num_checkpoints * sizeof(node_t *));
-    for(size_t i = num_checkpoints - 2; i >= 1; ++i)
-        checkpoints[i] = checkpoints[i - 1];
+    assert(field != NULL);
+    assert(start != NULL);
+    assert(destinations != NULL);
 
-    checkpoints[0] = start;
+    destinations = (node_t **)realloc(destinations, ++*num_destinations * sizeof(node_t *));
+    for(size_t i = *num_destinations - 1; i >= 1; --i) {
+        destinations[i] = calloc(1, sizeof(node_t *));
+        destinations[i] = destinations[i - 1];
+    }
 
-    for(size_t i = 0; i < num_checkpoints; ++i) {
-        for(size_t j = i + 1; j < num_checkpoints; ++j) {
-            for(size_t k = j + 1; k < num_checkpoints; ++k) {
-                if (lee_get_lenght(field, checkpoints[i]->location, checkpoints[k]->location) < lee_get_lenght(field, checkpoints[i]->location, checkpoints[j]->location)) {
+    destinations[0] = start;
+
+    for(size_t i = 0; i < *num_destinations; ++i) {
+        for(size_t j = i + 1; j < *num_destinations; ++j) {
+            for(size_t k = j + 1; k < *num_destinations; ++k) {
+                assert(destinations[i] != NULL || ! printf("i = %zu\n", i));
+                assert(destinations[j] != NULL || ! printf("j = %zu\n", j));
+                assert(destinations[k] != NULL || ! printf("k = %zu\n", k));
+
+                if (lee_get_lenght(field, destinations[i]->location, destinations[k]->location) < lee_get_lenght(field, destinations[i]->location, destinations[j]->location)) {
                     node_t *tmp;
 
-                    tmp = checkpoints[j];
-                    checkpoints[j] = checkpoints[k];
-                    checkpoints[k] = tmp;
+                    tmp = destinations[j];
+                    destinations[j] = destinations[k];
+                    destinations[k] = tmp;
                 }
             }
         }
     }
 
-    return checkpoints;
+    return destinations;
+}
+
+void field_loop_destinations(field_t *field, node_t **destinations, size_t num_destinations) {
+	for (size_t i = 0; i < num_destinations - 1; ++i) {
+        route_t *route;
+        coord_t from, to;
+
+        from = destinations[i]->location;
+        to = destinations [i + 1]->location;
+
+        route = route_find(field, from, to);
+        route_print(route);
+
+		if (i < num_destinations - 2) printf("\n\n");
+
+        route_destroy(route);
+	}
 }

@@ -122,6 +122,8 @@ compass_t node_get_checkpoint_direction(node_t *node);
 node_t **field_sort_checkpoints(field_t *field,
                                 node_t *start,
                                 node_t **checkpoints,
-                                size_t num_checkpoints);
+                                size_t *num_checkpoints);
+
+void field_loop_destinations(field_t *field, node_t **destinations, size_t num_destinations);
 
 #endif /* FIELD_H */
