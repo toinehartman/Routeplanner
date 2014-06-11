@@ -5,12 +5,27 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include <Windows.h>
+#include <stdbool.h>
+
 #include "main.h"
 #include "data.h"
 
 #define XDIM		5		/* define x-dimension */
 #define YDIM		5		/* define y-dimension */
 #define ARR_LEN(a)	(sizeof(a) / sizeof(a[0]))		/* used to determine the length of arrays */
+
+#ifdef _WIN32
+
+# include <time.h>
+# define M_SLEEP(t)    Sleep(t)
+
+#elif __APPLE__
+
+# include <unistd.h>
+# define M_SLEEP(t)    usleep(t * 1000)
+
+#endif
 
 extern node field[XDIM][YDIM];
 
@@ -69,11 +84,11 @@ void find_shortest_route(coord from, coord to);
  * @param init_dir Initial direction. The direction in which the vehicle is before following the routes directions.
  * @param to The destination coordinate.
  */
-void iterate_route(int init_dir, coord to);
+void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to);
 
 /**
  * Mark all nodes according to Lee algorithm.
- * 
+ *
  * @param from The starting point of the route.
  * @param to The destination of the route.
  * @see find_shortest_route()
@@ -87,7 +102,7 @@ void print_route_marks();
 
 /**
  * Give the length of the shortest route from coordinate a to coordinate b.
- * 
+ *
  * @param a Starttig coordinate of the route.
  * @param b Destination.
  * @return The length of the route.
@@ -108,7 +123,7 @@ void short_sort(int *check, int num);
  * @param checks Array of destination checkpoints in order.
  * @param checks_num Number of checkpoints i.e. the length of the 'checks' array.
  */
-void route_sequence(int *checks, int checks_num);
+void route_sequence(HANDLE hSerial, char *byteBuffer, int *checks, int checks_num);
 
 /**
  * Reads mines from the mines file and calls add_mine_to_field().
@@ -120,7 +135,7 @@ int read_mines();
 
 /**
  * Saves a found mine to the mines file.
- * 
+ *
  * @param a, b Coords between which the mine is present.
  */
 void save_mine_to_file(coord a, coord b);
@@ -128,7 +143,7 @@ void save_mine_to_file(coord a, coord b);
 /**
  * Add a mine to the field i.e. disconnect nodes between
  * which the mine is present.
- * 
+ *
  * @param a, b Coord between which the mine is present.
  */
 void add_mine_to_field(coord a, coord b);
@@ -178,5 +193,7 @@ char compass_int(int comp);
  * @return The compass direction when leaving this checkpoint.
  */
 int cp_direction(int cp);
+
+char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_state);
 
 #endif /* FUNCTIONS_H */
