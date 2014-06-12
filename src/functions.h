@@ -28,6 +28,7 @@
 #endif
 
 extern node field[XDIM][YDIM];
+static const char mine_file[] = "./mines.txt";
 
 coord return_coord(int x, int y);
 void init_field();
@@ -76,7 +77,7 @@ void clear_marks();
  * @param from The starting point of the route.
  * @param to The destination point of the route.
  */
-void find_shortest_route(coord from, coord to);
+void find_shortest_route(coord from, coord to, HANDLE hSerial, char *byteBuffer);
 
 /**
  * Iterate over the array created by clear_marks() and give directions.

@@ -105,11 +105,11 @@ int main(int argc, char* argv[])
     link_nodes();
     print_field();
 
-    char ans;
-    printf("Snelste route of gegeven volgorde?? (y/n): ");
-    scanf("%c", &ans);
-    if(ans == 'y')
-        short_sort(cp, cp_num);
+//    char ans;
+//    printf("Snelste route?? (y/n): ");
+//    scanf("%c", &ans);
+//    if(ans == 'y')
+    short_sort(cp, cp_num);
 
     printf("-------\nSorted!\n");
     for (j = 0; j < cp_num; j++) printf("%d ", cp[j]);

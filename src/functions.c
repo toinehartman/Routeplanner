@@ -17,7 +17,6 @@
 
 node field[XDIM][YDIM]; /* initialize the field */
 char *checkpoints[] = { "00", "10", "20", "30", "41", "42", "43", "34", "24", "14", "03", "02", "01" }; /* item i in this array is */
-char mine_file[] = "./mines.txt";
 
 static coord current;
 static coord route[40];
@@ -187,7 +186,7 @@ void clear_marks()
         }
 }
 
-void find_shortest_route(coord from, coord to)
+void find_shortest_route(coord from, coord to, HANDLE hSerial, char *byteBuffer)
 {
     int start_cp, end_cp, j, min_mark = 0, changed_neighbours = 0;
     coord min_coords;
@@ -237,6 +236,8 @@ void find_shortest_route(coord from, coord to)
         if (changed_neighbours == 0 || (z > 1 && current.x == to.x && current.y == to.y))
         {
             printf("Can't find route.\n");
+            byteBuffer[0] = '?';
+            writeByte(hSerial, byteBuffer);
             exit(1);
         }
         current = min_coords;
@@ -305,7 +306,7 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
             read_mines();
 
             printf("Mine saved, calculating new route...\n\n");
-            find_shortest_route(route[j], to);
+            find_shortest_route(route[j], to, hSerial, byteBuffer);
             iterate_route(hSerial, byteBuffer, (init_dir + 2) % 4, to);
             return;
         } else if (ret_value != 'C' && ret_value != 'M')
@@ -320,14 +321,15 @@ void iterate_route(HANDLE hSerial, char *byteBuffer, int init_dir, coord to)
 
     next_dir = drive_to_cp_direction(prev_dir, (cp_direction(end_cp) + 2) % 4);
 
+    M_SLEEP(300);
     // At checkpoint
     ret_value = zigbee_write(hSerial, byteBuffer, next_dir, FAKE_C);
-    printf("ret_value: %c\n", ret_value);
+//    printf("ret_value: %c\n", ret_value);
     printf("(%d, %d) -> (%d)  [%c]\n", route[j].x, route[j].y, end_cp, next_dir);
 
-//    zigbee_write(hSerial, byteBuffer, 'V', REAL_C);
     M_SLEEP(50);
 
+    printf("CHECKPOINT\n");
     zigbee_write(hSerial, byteBuffer, 'O', CHECKPOINT);
 }
 
@@ -409,7 +411,7 @@ void route_sequence(HANDLE hSerial, char *byteBuffer, int *checks, int checks_nu
     for (i = 0; i < checks_num - 1; i++)
     {
         coord to = checkpoint_to_coord(checks[i + 1]);
-        find_shortest_route(checkpoint_to_coord(checks[i]), to);
+        find_shortest_route(checkpoint_to_coord(checks[i]), to, hSerial, byteBuffer);
         iterate_route(hSerial, byteBuffer, cp_direction(checks[i]), checkpoint_to_coord(checks[i + 1]));
         if (i < checks_num - 2) printf("\n\n");
     }
@@ -587,12 +589,22 @@ char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_st
         byteBuffer[0] = ' ';
         assert(readByte(hSerial, byteBuffer) == 0);
 
-        if(route_state == CHECKPOINT) {
-            printf("Checkpoint, draaien...\n");
-            byteBuffer[0] = 'O';
-            writeByte(hSerial, byteBuffer);
-            return 'E';
-        } else if(byteBuffer[0] == 'C' || route_state == START) {
+        while(route_state == CHECKPOINT) {
+            readByte(hSerial, byteBuffer);
+            if(byteBuffer[0] == 'W' || byteBuffer[0] == 0x15) {
+                printf("Checkpoint, draaien... [%c]\n", byteBuffer[0]);
+                byteBuffer[0] = 'O';
+                writeByte(hSerial, byteBuffer);
+                return 'E';
+            }
+        }
+
+//        if(route_state == CHECKPOINT && byteBuffer[0] == 'W') {
+//            printf("Checkpoint, draaien...\n");
+//            byteBuffer[0] = 'O';
+//            writeByte(hSerial, byteBuffer);
+//            return 'E';
+        if(byteBuffer[0] == 'C' || route_state == START) {
             byteBuffer[0] = command;
             writeByte(hSerial, byteBuffer);
             sent_previous = byteBuffer[0];
@@ -603,12 +615,6 @@ char zigbee_write(HANDLE hSerial, char *byteBuffer, char command, state route_st
             writeByte(hSerial, byteBuffer);
             sent_previous = byteBuffer[0];
             return 'M';
-        } else if(route_state == CHECKPOINT) {
-            printf("Checkpoint, draaien...\n");
-            byteBuffer[0] = 'O';
-            writeByte(hSerial, byteBuffer);
-            sent_previous = byteBuffer[0];
-            return 'E';
         }
     }
 }
