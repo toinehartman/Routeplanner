@@ -1,6 +1,7 @@
 # Folders
 obj/
 bin/
+asm/
 
 # Executables
 *.exe
@@ -29,6 +30,7 @@ Icon
 # Misc
 *.tgz
 *.sh
+*.txt
 
 # XCode files
 build/

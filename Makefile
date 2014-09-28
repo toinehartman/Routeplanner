@@ -5,40 +5,38 @@ TARGET		= routeplanner.out
 
 CC			= gcc
 # flags for gcc compiler
-CFLAGS		+= -std=c99
+CFLAGS		+= -std=c99 -S -O3
 
 # flags for gcc linker
-LDFLAGS		= -lm
+LDFLAGS		= 
 
 # directories for source, object and binary file(s)
 SRCDIR		= src
-OBJDIR		= obj
+ASMDIR		= asm
 BINDIR		= bin
 
 SOURCES		:= $(wildcard $(SRCDIR)/*.c)
 INCLUDES	:= $(wildcard $(SRCDIR)/*.h)
-OBJECTS 	:= $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-DEPENDENCIES:= $(wildcard $(OBJDIR)/*.d)
+ASM 		:= $(SOURCES:$(SRCDIR)/%.c=$(ASMDIR)/%.s)
 
 default: $(BINDIR)/$(TARGET)
 
 # link all .o files together
-$(BINDIR)/$(TARGET): $(OBJECTS)
+$(BINDIR)/$(TARGET): $(ASM)
 	@mkdir -p $(BINDIR)
-	$(CC) -o $(BINDIR)/$(TARGET) $(LDFLAGS) $(OBJECTS)
+	$(CC) -o $(BINDIR)/$(TARGET) $(LDFLAGS) $(ASM)
 
 # compile and generate dependency (.d) file for each .c file
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c $(SRCDIR)/*.h
-	@mkdir -p $(DEPDIR) $(OBJDIR)
-	@gcc -MM $(CFLAGS) $(SRCDIR)/$*.c > $(OBJDIR)/$*.d
-	$(CC) -c $(CFLAGS) $(SRCDIR)/$*.c -o $(OBJDIR)/$*.o
+$(ASM): $(ASMDIR)/%.s : $(SRCDIR)/%.c $(SRCDIR)/*.h
+	@mkdir -p $(ASMDIR)
+	$(CC) -c $(CFLAGS) $(SRCDIR)/$*.c -o $(ASMDIR)/$*.s
 
 debug:
 	@make clean && CFLAGS="-DDEBUG" make
 
 # remove object and dependency files
 clean:
-	rm -rf $(BINDIR) $(OBJDIR)
+	rm -rf $(BINDIR) $(ASMDIR)
 
 # run the program with given arguments
 run: $(BINDIR)/$(TARGET)
@@ -46,7 +44,7 @@ run: $(BINDIR)/$(TARGET)
 
 # create archive with source code
 release:
-	tar -czvf routeplanner.tgz --exclude=*.tgz --exclude=*.sh --exclude=bin --exclude=obj --exclude=.* *
+	tar -czvf routeplanner.tgz --exclude=*.tgz --exclude=*.sh --exclude=bin --exclude=asm --exclude=.* *
 
 # install binary to /usr/local/bin
 install: $(BINDIR)/$(TARGET)
