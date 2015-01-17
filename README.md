@@ -1,6 +1,6 @@
 Routeplanner
 ============
-This is a routeplanner, whick gives the shortest route between two points on an 5 by 5 grid.
+This is a routeplanner, which gives the shortest route between two points on an 5 by 5 grid.
 ## Synopsis
 
 This routeplanner find a route between a starting checkpoint on the edge of a **5 by 5 grid** and one or more endpoints. It can go by the checkpoints in a given order or via the shortest route that visits them all.
